@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">News</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="login_register">登录/注册</string>
+    <string name="setting">设置</string>
+    <string name="my_collect">我的收藏</string>
+    <string name="my_Reviews">我的评论</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="user_setting">用户设置</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="about_app">关于</string>
+    <string name="feedback">意见反馈</string>
+    <string name="developer">开发人员：刘小龙</string>
+    <string name="company">单位地址：湖南汽车工程职业学院</string>
+    <string name="email">联系邮箱：lxl970211@outlook.com</string>
+    <string name="feedback_hint">您的每一次反馈及建议都是对我们的鼓励，我们会及时查看你的建议并及时反馈您</string>
+    <string name="Contact_information">请留下您的联系方式 手机/邮箱</string>
+    <string name="submit">提交</string>
+    <string name="login_email">邮箱</string>
+    <string name="password">密码</string>
+    <string name="forgetPassword">忘记密码</string>
+
+    <string name="userName">用户名</string>
+    <string name="confirmPassword">确认密码</string>
+    <string name="sendCodes">发送验证码</string>
+    <string name="enterCodes">输入验证码</string>
+</resources>

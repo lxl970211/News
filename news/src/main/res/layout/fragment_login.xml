@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:padding="10dp"
+    tools:context="com.zzptc.liuxiaolong.news.fragment.FragmentLogin">
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_userEmail_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_account_circle_black_48dp"/>
+        <EditText
+            android:id="@+id/et_userEmail"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="@string/login_email"
+            android:background="@drawable/feedback_edittext_shape"
+            />
+    </LinearLayout>
+
+    <View
+        style="@style/Line"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/iv_userPassword_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_lock_outline_black_48dp"/>
+        <EditText
+            android:layout_toRightOf="@id/iv_userPassword_img"
+            android:id="@+id/et_userPassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/feedback_edittext_shape"
+            android:hint="@string/password"
+            />
+        <TextView
+            android:id="@+id/tv_forgetpassword"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgetPassword"
+            android:layout_centerVertical="true"
+            android:paddingRight="10dp"
+            />
+
+    </RelativeLayout>
+    <View
+        style="@style/Line"/>
+
+    <Button
+        style="@style/SubmitButtonStyle"
+        android:id="@+id/btn_login"
+        android:text="@string/login"
+        android:layout_marginTop="20dp"
+        />
+
+</LinearLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="backgroundcolor">#24384B</color>
+
+    <integer-array name="gplus_colors">
+        <item>@color/google_color_blue</item>
+        <item>@color/google_color_red</item>
+        <item>@color/google_color_yellow</item>
+        <item>@color/google_color_green</item>
+    </integer-array>
+    <color name="google_color_blue">#4285F4</color>
+    <color name="google_color_red">#EA4335</color>
+    <color name="google_color_yellow">#FBBC05</color>
+    <color name="google_color_green">#34A853</color>
+
+    <color name="line_color">#e0e0e0</color>
+
+
+    <color name="white">#fafafa</color>
+    <color name="white_dark">#f3f3f3</color>
+
+    <color name="gray_light">#cccccc</color>
+    <color name="gray">#777</color>
+    <color name="gray_dark">#383838</color>
+
+    <color name="green_light">#8e9ea4</color>
+    <color name="green">#34515c</color>
+    <color name="green_dark">#1e3e4a</color>
+
+    <color name="night_mask">#90000000</color>
+    <color name="blue">@android:color/holo_blue_light</color>
+</resources>

@@ -1,0 +1,129 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:background="@android:color/white"
+    tools:context="com.zzptc.liuxiaolong.news.fragment.FragmentRegister">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            style="@style/EditTextStyle"
+            android:id="@+id/et_register_userName"
+            android:hint="@string/userName"
+            android:layout_gravity="bottom"
+            />
+        <TextView
+            android:id="@+id/userNamePrompt"
+            style="@style/PromptTextViewStyle"/>
+
+    </RelativeLayout>
+
+    <View
+        style="@style/Line"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_register_pwd"
+            style="@style/EditTextStyle"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            />
+        <TextView
+            android:id="@+id/pwdprompt"
+            style="@style/PromptTextViewStyle"/>
+    </RelativeLayout>
+
+    <View
+        style="@style/Line"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_register_confirmPwd"
+            style="@style/EditTextStyle"
+            android:hint="@string/confirmPassword"
+            android:inputType="textPassword"
+            />
+
+        <TextView
+            android:id="@+id/confirmpwd_prompt"
+            style="@style/PromptTextViewStyle"/>
+    </RelativeLayout>
+
+    <View
+        style="@style/Line"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_register_email"
+            style="@style/EditTextStyle"
+            android:hint="@string/login_email"
+            />
+
+        <TextView
+            android:id="@+id/emailprompt"
+            style="@style/PromptTextViewStyle"/>
+    </RelativeLayout>
+
+    <View
+        style="@style/Line"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_gravity="bottom"
+            android:layout_height="wrap_content">
+
+
+            <EditText
+                android:id="@+id/et_enterCodes"
+                android:background="@drawable/feedback_edittext_shape"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:singleLine="true"
+                android:hint="@string/enterCodes"
+                android:paddingLeft="10dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/blue"
+                android:layout_marginRight="10dp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/img_Codes"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:scaleType="fitXY"
+            android:background="@color/blue"
+            android:textColor="@android:color/white"
+            />
+    </LinearLayout>
+
+
+    <Button
+        style="@style/SubmitButtonStyle"
+        android:id="@+id/btn_register"
+        android:text="@string/register"
+        android:layout_marginTop="10dp"
+        />
+</LinearLayout>

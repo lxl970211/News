@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:background="@android:color/white"
+    tools:context="com.zzptc.liuxiaolong.news.activity.About_app">
+
+
+    <ImageView
+        android:paddingLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/man"
+        android:layout_marginTop="20dp"
+        />
+
+    <TextView
+        style="@style/AboutAppTextViewStyle"
+        android:text="@string/developer"/>
+
+    <TextView
+        style="@style/AboutAppTextViewStyle"
+        android:text="@string/company"/>
+    <TextView
+        style="@style/AboutAppTextViewStyle"
+        android:text="@string/email"/>
+</LinearLayout>

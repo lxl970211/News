@@ -1,0 +1,88 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@android:color/holo_blue_light</item>
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+
+    </style>
+    <style name="MainActivityToolBarImageButtonStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    
+    <style name="TextViewItemsStyle">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        
+        
+    </style>
+
+    <style name="ortherActivityStyle" parent="BaseTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@android:color/holo_blue_light</item>
+        <item name="colorPrimaryDark">@android:color/holo_blue_light</item>
+        <item name="colorAccent">@android:color/holo_blue_light</item>
+
+    </style>
+
+    <style name="toolbarStyle">
+        <item name="android:textSize">17sp</item>
+    </style>
+
+
+    <style name="settingBtnItemStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:background">@drawable/setting_btn_shape</item>
+        <item name="android:padding">15dp</item>
+    </style>
+
+
+    <style name="AboutAppTextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+
+    </style>
+
+    <style name="Line">
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@color/blue</item>
+    </style>
+    <style name="EditTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:background">@drawable/feedback_edittext_shape</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+
+    <style name="SubmitButtonStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/login_btn_selector</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+
+    <style name="PromptTextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:textColor">@android:color/holo_red_light</item>
+
+    </style>
+</resources>

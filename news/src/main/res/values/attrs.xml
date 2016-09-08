@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="containerBackground" format="reference|color"/>
+    <attr name="cardBackground" format="reference|color"/>
+    <attr name="titleColor" format="reference|color"/>
+    <attr name="textColor" format="reference|color"/>
+    <attr name="selectorBtn" format="reference|color"/>
+    <attr name="selectorListItem" format="reference|color"/>
+
+
+</resources>

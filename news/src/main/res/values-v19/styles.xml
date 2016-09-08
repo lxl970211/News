@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 该属性必须 -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowSharedElementsUseOverlay">false</item>
+    </style>
+</resources>

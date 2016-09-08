@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single" android:id="@+id/firstGroup">
+        <item android:title="@string/my_Reviews" android:icon="@mipmap/ic_sms_black_48dp" android:id="@+id/my_reviews"/>
+        <item android:title="@string/my_collect" android:icon="@mipmap/ic_favorite_black_48dp" android:id="@+id/my_collect"/>
+    </group>
+
+    <group android:id="@+id/twoGroup">
+        <item android:title="@string/setting" android:id="@+id/setting" android:icon="@mipmap/settings"/>
+    </group>
+</menu>
+
