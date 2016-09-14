@@ -2,6 +2,7 @@ package com.zzptc.liuxiaolong.news;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -35,7 +36,7 @@ public class MyApplication extends Application {
     }
 
     /**
-     * ��ʼ��ImageLoader
+     * ImageLoader
      */
     private void initImageLoader(Context context) {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
@@ -58,4 +59,8 @@ public class MyApplication extends Application {
                 .displayer(new FadeInBitmapDisplayer(200))
                 .build();
     }
+
+
+
+
 }

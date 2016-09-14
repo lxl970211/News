@@ -1,19 +1,19 @@
 package com.zzptc.liuxiaolong.news.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
-import com.zzptc.liuxiaolong.news.model.NewsData;
+import com.zzptc.liuxiaolong.news.view.SlidingActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,29 +22,32 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import java.io.File;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
 
+
+
 @ContentView(R.layout.activity_news_detail)
-public class NewsDetail extends AppCompatActivity {
+public class NewsDetail extends SlidingActivity {
 
     @ViewInject(R.id.webview)
     private WebView webView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         x.view().inject(this);
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         initdata();
+
 
     }
 
 
+
     public void initdata(){
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         //返回值
         setResult(StaticProperty.RETURN_NEWSLIST);
 

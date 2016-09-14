@@ -4,6 +4,8 @@ package com.zzptc.liuxiaolong.news.content;
  * Created by lxl97 on 2016/9/7.
  */
 public class ResultCodes {
+
+
     public static final int EMAIL_ERROR = 3;
     //邮箱存在
     public static final int EMAILL_EXIST = 1;
@@ -14,5 +16,7 @@ public class ResultCodes {
     //注册失败
     public static final int REGISTER_FAILED = 101;
 
+    public static final int LOGIN_ERROR = 102;
 
+    public static final int LOGIN_AUCCESS = 103;
 }

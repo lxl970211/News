@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.FileUtils;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
+import com.zzptc.liuxiaolong.news.view.SlidingActivity;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -21,7 +23,7 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 @ContentView(R.layout.activity_setting)
-public class Setting extends AppCompatActivity{
+public class Setting extends SlidingActivity{
     @ViewInject(R.id.setting_toolbar)
     private Toolbar toolbar;
     @ViewInject(R.id.user_setting)
@@ -48,6 +50,9 @@ public class Setting extends AppCompatActivity{
     }
 
     public void init(){
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+
         handler = new Handler();
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

@@ -1,7 +1,14 @@
 package com.zzptc.liuxiaolong.news.Utils;
 
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.Build;
+
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -82,4 +89,55 @@ public class MyUtils {
         return k;
     }
 
+    public static String parseStrToMd5L32(String str){
+        String reStr = null;
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            byte[] bytes = md5.digest(str.getBytes());
+            StringBuffer stringBuffer = new StringBuffer();
+            for (byte b : bytes){
+                int bt = b&0xff;
+                if (bt < 16){
+                    stringBuffer.append(0);
+                }
+                stringBuffer.append(Integer.toHexString(bt));
+            }
+            reStr = stringBuffer.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return reStr;
+    }
+
+
+
+    public String getMac() {
+        String macSerial = null;
+        String str = "";
+        try {
+            Process pp = Runtime.getRuntime().exec(
+                    "cat /sys/class/net/wlan0/address ");
+            InputStreamReader ir = new InputStreamReader(pp.getInputStream());
+            LineNumberReader input = new LineNumberReader(ir);
+
+
+            for (; null != str;) {
+                str = input.readLine();
+                if (str != null) {
+                    macSerial = str.trim();// 去空格
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            // 赋予默认值
+            ex.printStackTrace();
+        }
+        return macSerial;
+    }
+
+
+
+    public static String myToken(String userpassword){
+        return Build.MODEL+new MyUtils().getMac()+userpassword;
+    }
 }

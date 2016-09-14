@@ -87,6 +87,8 @@ public class RecylerViewAdapter extends RecyclerView.Adapter<RecylerViewAdapter.
                     //网络获取图片
                     ImageLoader.getInstance().displayImage(newsData.getThumbnail_pic_s(), holder.iv_newsPic, MyApplication.mOptions);
                 }
+
+
                 //动画
                 setAnimation(holder.card, position);
             }

@@ -11,12 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.zzptc.liuxiaolong.news.MainActivity;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.activity.NewsDetail;
 import com.zzptc.liuxiaolong.news.adapter.RecylerViewAdapter;
@@ -24,12 +21,10 @@ import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.datapars.GetNews;
 import com.zzptc.liuxiaolong.news.model.NewsData;
-import com.zzptc.liuxiaolong.news.service.MyService;
 import com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView;
 import com.zzptc.liuxiaolong.news.view.LoadFinshCallBack;
 
 import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 

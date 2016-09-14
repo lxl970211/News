@@ -4,6 +4,7 @@
 
         <item name="android:colorControlHighlight">@color/colorPrimary</item> 
         <item name="android:windowSharedElementsUseOverlay">false</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
 

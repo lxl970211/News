@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -33,6 +34,7 @@ import com.zzptc.liuxiaolong.news.activity.Setting;
 import com.zzptc.liuxiaolong.news.adapter.MyFragmentPagerAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
+import com.zzptc.liuxiaolong.news.fragment.FragmentLogin;
 import com.zzptc.liuxiaolong.news.fragment.MyFragment;
 import com.zzptc.liuxiaolong.news.service.MyService;
 
@@ -64,11 +66,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @ViewInject(R.id.search_news)
     private ImageView search_news;
+
     //navigationView headerview
     private ImageView user_head;
     private TextView user_name;
-
-    private List<Bitmap> bitmaplist;
 
     String[] titles = {"头条","娱乐","国内","社会","体育","军事","财经","科技","国际","时尚"};
     public static final String[] pinyintitles = {"top", "yule", "guonei", "shehui", "tiyu", "junshi", "caijing", "keji", "guoji", "shishang"};
@@ -99,12 +100,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initListener();
         initData();
 
+        SharedPreferences sp = getSharedPreferences("token", MODE_PRIVATE);
+        String name = sp.getString("token", "");
+        System.out.println(name);
+
     }
 
     public void init(){
         handler = new Handler();
 
-        bitmaplist = new ArrayList<>();
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -120,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         user_name = (TextView) headerLayout.findViewById(R.id.user_name);
         user_head = (ImageView) headerLayout.findViewById(R.id.user_head);
+
+
 
 
     }
@@ -139,13 +146,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
 
                     case R.id.my_collect:
-
-
+                        //关闭侧边菜单
                         drawer.closeDrawers();
                         break;
 
                     case R.id.setting:
-
 
                         startActivity(new Intent(MainActivity.this, Setting.class));
                         overridePendingTransition(R.anim.activity_in_anim, R.anim.activity_out_anim);

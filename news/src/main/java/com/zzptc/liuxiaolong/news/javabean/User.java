@@ -8,7 +8,6 @@ public class User {
     private String user_name;
     private String user_email;
     private String user_pwd;
-
     public String getType() {
         return type;
     }
@@ -40,4 +39,6 @@ public class User {
     public void setUser_name(String user_name) {
         this.user_name = user_name;
     }
+
+
 }

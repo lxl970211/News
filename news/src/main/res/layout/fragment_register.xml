@@ -101,6 +101,7 @@
                 android:singleLine="true"
                 android:hint="@string/enterCodes"
                 android:paddingLeft="10dp"
+
                 />
             <View
                 android:layout_width="match_parent"
