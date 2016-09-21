@@ -4,10 +4,12 @@ package com.zzptc.liuxiaolong.news.javabean;
  * Created by lxl97 on 2016/9/7.
  */
 public class User {
+
+    private String userName;
+    private String userEmail;
+    private String userPassword;
+    private String headPath;
     private String type;
-    private String user_name;
-    private String user_email;
-    private String user_pwd;
     public String getType() {
         return type;
     }
@@ -16,29 +18,36 @@ public class User {
         this.type = type;
     }
 
-    public String getUser_pwd() {
-        return user_pwd;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser_pwd(String user_pwd) {
-        this.user_pwd = user_pwd;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getUser_email() {
-        return user_email;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUser_email(String user_email) {
-        this.user_email = user_email;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
+    public String getHeadPath() {
+        return headPath;
+    }
+
+    public void setHeadPath(String headPath) {
+        this.headPath = headPath;
+    }
 
 }

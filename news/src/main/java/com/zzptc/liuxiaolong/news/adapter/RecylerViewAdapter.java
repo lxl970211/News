@@ -21,6 +21,9 @@ import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.FileUtils;
 import com.zzptc.liuxiaolong.news.model.NewsData;
 
+import org.xutils.image.ImageOptions;
+import org.xutils.x;
+
 import java.io.File;
 import java.util.List;
 
@@ -68,7 +71,6 @@ public class RecylerViewAdapter extends RecyclerView.Adapter<RecylerViewAdapter.
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-
             final NewsData newsData = list.get(position);
             //新闻数据不为空
             if (newsData != null) {
@@ -82,6 +84,7 @@ public class RecylerViewAdapter extends RecyclerView.Adapter<RecylerViewAdapter.
                     String filepath = FileUtils.IMAGECACHEPATH + File.separator + fileUtils.converUrlToFileName(newsData.getThumbnail_pic_s());
                     String imageurl = ImageDownloader.Scheme.FILE.wrap(filepath);
                     //加载本地新闻图片
+
                     ImageLoader.getInstance().displayImage(imageurl, holder.iv_newsPic, MyApplication.mOptions);
                 } else {
                     //网络获取图片

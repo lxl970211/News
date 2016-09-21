@@ -39,8 +39,7 @@ public class GetNews {
     private static String result;
 
 
-    //短时缓存
-    private static final int CACHE_SHOUT_TIME = 300000;
+
     //长时间缓存
     private static final int CACHE_LONG_TIME = 3600000;
 
@@ -94,15 +93,14 @@ public class GetNews {
             //判断文件路径是否存在
             FileUtils.createCacheFolder(FileUtils.IMAGECACHEPATH);
             //如果路径存在并且缓存时间小于一小时则读取缓存文件
-            if (file.exists() && FileUtils.getalreadyCacheTime(file)) {
+            if (file.length()>0 && FileUtils.getalreadyCacheTime(file)) {
                 //从缓存中获取新闻
                 return getNewsDataFromCache(params[0]);
-
             } else {
                 String json = null;
                 try {
-                    URL url = new URL("http://v.juhe.cn/toutiao/index?type=" + params[0] + "&key=" + StaticProperty.APPKEYS);
-                    json  = getNewsJsonData(url);
+                    URL url = new URL(newsUrl(params[0]));
+                    json  = getJson(url);
 
                     //开启服务
                     Intent intent = new Intent(context, MyService.class);
@@ -111,7 +109,7 @@ public class GetNews {
                     //新闻数据
                     Bundle bundle = new Bundle();
                     bundle.putString("fileName", FileUtils.fileName(params[0]));
-                    bundle.putString("newsJson", getNewsJsonData(url));
+                    bundle.putString("newsJson", getJson(url));
                     intent.putExtras(bundle);
                     //启动服务
                     context.startService(intent);
@@ -135,12 +133,6 @@ public class GetNews {
             if (onGetNewsListener != null){
                 onGetNewsListener.OnCompleteGetNewsListener(list);
             }
-
-        }
-        //进行中
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
 
         }
 
@@ -224,7 +216,7 @@ public class GetNews {
      * @param url
      * @return
      */
-    public String getNewsJsonData(URL url){
+    public String getJson(URL url){
         String jsonData = null;
         try {
 
@@ -290,7 +282,7 @@ public class GetNews {
             //api接口地址
             URL url = new URL("http://api.jisuapi.com/news/search?keyword=" + searchNewsKeyWord + "&appkey=" + StaticProperty.JISUAPIKEYS);
             //得到json数据
-            String jsondata = getNewsJsonData(url);
+            String jsondata = getJson(url);
             if (jsondata != null) {
                 //解析json数据得到新闻列表
             SearchNewsBean searchNewsBean = gson.fromJson(jsondata, SearchNewsBean.class);
@@ -303,6 +295,12 @@ public class GetNews {
         }
 
         return list;
+    }
+
+
+    public static String newsUrl(String newsType){
+
+        return "http://v.juhe.cn/toutiao/index?type=" + newsType + "&key=" + StaticProperty.APPKEYS;
     }
 
 }

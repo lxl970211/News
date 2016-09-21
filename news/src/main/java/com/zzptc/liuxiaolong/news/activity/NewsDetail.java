@@ -76,8 +76,8 @@ public class NewsDetail extends SlidingActivity {
                         document.select("div.pswp").remove();
 
 
-                        Element element = document.getElementById("DFTOUTIAOCS");
-                        element.remove();
+//                        Element element = document.getElementById("DFTOUTIAOCS");
+//                        element.remove();
 
                         Element e1 = document.getElementById("news_check");
                         e1.remove();

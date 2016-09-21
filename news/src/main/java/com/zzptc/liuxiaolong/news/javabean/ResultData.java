@@ -1,8 +1,10 @@
-package com.zzptc.liuxiaolong.news.model;
+package com.zzptc.liuxiaolong.news.javabean;
 
-public class LoginResult {
+public class ResultData {
 	private String status;
 	private String token;
+
+
 	public void setStatus(String status) {
 		this.status = status;
 	}

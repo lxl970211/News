@@ -20,11 +20,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.CodeUtils;
+import com.zzptc.liuxiaolong.news.Utils.MD5;
 import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.javabean.User;
-import com.zzptc.liuxiaolong.news.model.LoginResult;
+import com.zzptc.liuxiaolong.news.javabean.ResultData;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -143,7 +144,7 @@ public class FragmentRegister extends Fragment{
                     if (reg_email.getText().toString() != null && !"".equals(reg_email.getText().toString())){
                         User user = new User();
                         user.setType("email");
-                        user.setUser_email(reg_email.getText().toString());
+                        user.setUserEmail(reg_email.getText().toString());
                         new CheckEmail().execute(user);
                     }
                     break;
@@ -176,11 +177,11 @@ public class FragmentRegister extends Fragment{
 
                 User user = new User();
                 user.setType("register");
-                user.setUser_name(reg_userName.getText().toString());
-                user.setUser_email(reg_email.getText().toString());
+                user.setUserName(reg_userName.getText().toString());
+                user.setUserEmail(reg_email.getText().toString());
 
                 //MD5加密密码
-                user.setUser_pwd(MyUtils.parseStrToMd5L32(reg_pwd.getText().toString()));
+                user.setUserPassword(MD5.parseStrToMd5L32(reg_pwd.getText().toString()));
 
                 new CheckEmail().execute(user);
 
@@ -192,6 +193,7 @@ public class FragmentRegister extends Fragment{
 
             case R.id.img_Codes:
                 codes.setImageBitmap(codeUtils.createBitmap());
+                resetFocuse(true);
                 break;
         }
 
@@ -207,22 +209,22 @@ public class FragmentRegister extends Fragment{
         protected Void doInBackground(User... user) {
 
 
-            if (!MyUtils.EditTextFormat(user[0].getUser_email(), StaticProperty.EMAIL_REGULAT_EXPRESSIONS)){
+            if (!MyUtils.EditTextFormat(user[0].getUserEmail(), StaticProperty.EMAIL_REGULAT_EXPRESSIONS)){
                 publishProgress(ResultCodes.EMAIL_ERROR);
             }else {
 
                 RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"RegisterServlet");
                 //请求参数
                 rp.addParameter("type", user[0].getType());
-                rp.addParameter("user_name", user[0].getUser_name());
-                rp.addParameter("user_email", user[0].getUser_email());
-                rp.addParameter("user_password", user[0].getUser_pwd());
+                rp.addParameter("user_name", user[0].getUserName());
+                rp.addParameter("user_email", user[0].getUserEmail());
+                rp.addParameter("user_password", user[0].getUserPassword());
 
                 x.http().post(rp, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
                         Gson g = new Gson();
-                        LoginResult lr = g.fromJson(result, LoginResult.class);
+                        ResultData lr = g.fromJson(result, ResultData.class);
                         publishProgress(Integer.parseInt(lr.getStatus()));
                     }
 
@@ -309,11 +311,8 @@ public class FragmentRegister extends Fragment{
     public boolean verificationform(){
 
         if (user_namecorrect && pwdcorrect && confirmpwdcorrect && codescorrect && emailcorrect){
-            System.out.println("ver"+true);
             return true;
-
         }
-        System.out.println(false);
             return false;
     }
 
@@ -327,7 +326,6 @@ public class FragmentRegister extends Fragment{
         reg_pwd.setFocusable(isfalse);
         reg_confirmPwd.setFocusable(isfalse);
         enterCodes.setFocusable(isfalse);
-
 
     }
 }

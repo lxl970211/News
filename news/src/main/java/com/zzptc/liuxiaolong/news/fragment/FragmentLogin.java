@@ -4,33 +4,27 @@ package com.zzptc.liuxiaolong.news.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.zzptc.liuxiaolong.news.MyApplication;
 import com.zzptc.liuxiaolong.news.R;
+import com.zzptc.liuxiaolong.news.Utils.MD5;
 import com.zzptc.liuxiaolong.news.Utils.MyUtils;
-import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.javabean.User;
-import com.zzptc.liuxiaolong.news.model.LoginResult;
+import com.zzptc.liuxiaolong.news.javabean.ResultData;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
-import org.xutils.http.body.StringBody;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -80,9 +74,9 @@ public class FragmentLogin extends Fragment {
         switch (view.getId()){
             case R.id.btn_login:
                 User user = new User();
-                user.setUser_email(et_userEmail.getText().toString());
-                String pwd = MyUtils.MD5(et_userPassword.getText().toString());
-                user.setUser_pwd(pwd);
+                user.setUserEmail(et_userEmail.getText().toString());
+                String pwd = MD5.MD5(et_userPassword.getText().toString());
+                user.setUserPassword(pwd);
                 new Login().execute(user);
 
                 break;
@@ -99,9 +93,9 @@ public class FragmentLogin extends Fragment {
         protected Void doInBackground(User... params) {
 
             RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"LoginServlet");
-            rp.addParameter("user_email", params[0].getUser_email());
-            rp.addParameter("user_password", params[0].getUser_pwd());
-            rp.addParameter("token", MyUtils.myToken(params[0].getUser_pwd()));
+            rp.addParameter("user_email", params[0].getUserEmail());
+            rp.addParameter("user_password", params[0].getUserPassword());
+            rp.addParameter("token", MyUtils.myToken(params[0].getUserPassword()));
             x.http().post(rp, new Callback.CommonCallback<String>() {
                 @Override
                 public void onCancelled(CancelledException cex) {
@@ -112,7 +106,7 @@ public class FragmentLogin extends Fragment {
                 public void onSuccess(String result) {
                     Gson gson = new Gson();
 
-                    LoginResult res =gson.fromJson(result, LoginResult.class);
+                    ResultData res =gson.fromJson(result, ResultData.class);
                     publishProgress(res.getStatus(), res.getToken());
 
                 }
@@ -134,7 +128,6 @@ public class FragmentLogin extends Fragment {
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-            System.out.println(values[0]);
 
             switch (Integer.parseInt(values[0])) {
                 case ResultCodes.LOGIN_AUCCESS:
@@ -142,10 +135,13 @@ public class FragmentLogin extends Fragment {
 
                     SharedPreferences.Editor editor = getContext().getSharedPreferences("token", Context.MODE_PRIVATE).edit();
                     editor.putString("token", values[1]);
-                    editor.putString("name", et_userEmail.getText().toString());
-                    editor.putString("password", MyUtils.MD5(et_userPassword.getText().toString()));
+                    editor.putString("email", et_userEmail.getText().toString());
+                    editor.putString("password", MD5.MD5(et_userPassword.getText().toString()));
                     editor.commit();
-
+                    //设置返回结果码
+                    getActivity().setResult(ResultCodes.LOGIN_AUCCESS);
+                    //登录成功关闭登录界面
+                    getActivity().finish();
                     break;
                 case ResultCodes.LOGIN_ERROR:
                     Toast.makeText(getContext(), "请输入正确的用户名和密码", Toast.LENGTH_SHORT).show();

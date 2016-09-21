@@ -16,6 +16,9 @@ import com.zzptc.liuxiaolong.news.MyApplication;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.model.Search_Result;
 
+import org.xutils.image.ImageOptions;
+import org.xutils.x;
+
 import java.util.List;
 
 /**
@@ -51,11 +54,13 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        ImageOptions imageOptions = ImageOptions.DEFAULT;
         final Search_Result.S_NewsData newsData = list.get(position);
         if (newsData != null){
 
             holder.tv_newsTitle.setText(newsData.getTitle());
             holder.tv_newsAuthor_name.setText(newsData.getCategory());
+            x.image().bind(holder.iv_newsPic,newsData.getPic(),imageOptions);
             ImageLoader.getInstance().displayImage(newsData.getPic(), holder.iv_newsPic, MyApplication.mOptions);
 
         }

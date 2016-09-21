@@ -17,7 +17,7 @@
 
 
     <TextView
-        android:id="@+id/user_name"
+        android:id="@+id/user_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="登录"

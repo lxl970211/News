@@ -2,11 +2,9 @@ package com.zzptc.liuxiaolong.news;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -27,17 +25,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zzptc.liuxiaolong.news.Utils.LinkService;
+import com.google.gson.Gson;
+import com.zzptc.liuxiaolong.news.Utils.MyUtils;
+import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
+import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.activity.Login;
 import com.zzptc.liuxiaolong.news.activity.SearchNews;
 import com.zzptc.liuxiaolong.news.activity.Setting;
 import com.zzptc.liuxiaolong.news.adapter.MyFragmentPagerAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
+import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
-import com.zzptc.liuxiaolong.news.fragment.FragmentLogin;
 import com.zzptc.liuxiaolong.news.fragment.MyFragment;
+import com.zzptc.liuxiaolong.news.javabean.User;
 import com.zzptc.liuxiaolong.news.service.MyService;
 
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -69,8 +73,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //navigationView headerview
     private ImageView user_head;
-    private TextView user_name;
+    private TextView user_login;
 
+    
     String[] titles = {"头条","娱乐","国内","社会","体育","军事","财经","科技","国际","时尚"};
     public static final String[] pinyintitles = {"top", "yule", "guonei", "shehui", "tiyu", "junshi", "caijing", "keji", "guoji", "shishang"};
 
@@ -100,15 +105,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initListener();
         initData();
 
-        SharedPreferences sp = getSharedPreferences("token", MODE_PRIVATE);
-        String name = sp.getString("token", "");
-        System.out.println(name);
+        System.out.println(NetWorkStatus.getNetWorkType(this));
 
     }
 
+
+
+
     public void init(){
         handler = new Handler();
-
+        if (UserInfoAuthentication.tokenExists(this)){
+            new GetUserInfo().execute(UserInfoAuthentication.getTokeninfo(this, "token"));
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -123,18 +131,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //找到navigationView头布局控件
         View headerLayout = navigationView.getHeaderView(0);
 
-        user_name = (TextView) headerLayout.findViewById(R.id.user_name);
+        user_login = (TextView) headerLayout.findViewById(R.id.user_login);
         user_head = (ImageView) headerLayout.findViewById(R.id.user_head);
 
 
-
-
+        user_head.setOnClickListener(this);
+        user_login.setOnClickListener(this);
+        search_news.setOnClickListener(this);
     }
 
     public void initListener(){
 
-        user_name.setOnClickListener(this);
-        search_news.setOnClickListener(this);
+
         //左侧菜单条目监听
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -184,18 +192,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //绑定viewpager
         tablayout.setupWithViewPager(viewPager);
 
-
     }
 
 
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-
-    }
 
     @Override
     protected void onDestroy() {
@@ -213,19 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.search_news:
-                startActivity(new Intent(this, SearchNews.class));
-                MyAnimator.openActivityAnim(MainActivity.this);
-                break;
-            case R.id.user_name:
-                startActivity(new Intent(this, Login.class));
-                MyAnimator.openActivityAnim(MainActivity.this);
-                break;
-        }
-    }
+
 
     @Override
     public void onBackPressed() {
@@ -235,4 +225,114 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onBackPressed();
         }
     }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            //搜索按钮监听
+            case R.id.search_news:
+                startActivity(new Intent(this, SearchNews.class));
+                MyAnimator.openActivityAnim(MainActivity.this);
+                break;
+            //登录按钮监听
+            case R.id.user_login:
+                startActivityForResult(new Intent(this, Login.class), 1);
+                MyAnimator.openActivityAnim(MainActivity.this);
+                break;
+            //用户头像监听
+            case R.id.user_head:
+                //token不存在则打开登录页面 存在则设置头像信息
+                if(!UserInfoAuthentication.tokenExists(this)){
+                    startActivity(new Intent(this, Login.class));
+                    MyAnimator.openActivityAnim(MainActivity.this);
+                }else{
+
+                    Toast.makeText(MainActivity.this, "touxiang", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == ResultCodes.LOGIN_AUCCESS){
+            if (UserInfoAuthentication.tokenExists(this)){
+                new GetUserInfo().execute(UserInfoAuthentication.getTokeninfo(this, "token"));
+            }
+        }
+    }
+
+
+    private class GetUserInfo extends AsyncTask<String, User, User>{
+        @Override
+        protected User doInBackground(String... params) {
+            if (UserInfoAuthentication.tokenExists(MainActivity.this)){
+                String name = UserInfoAuthentication.getTokeninfo(MainActivity.this, "name");
+                User user = new User();
+                user.setUserName(name);
+                publishProgress(user);
+            }else {
+
+                RequestParams rp = new RequestParams(StaticProperty.SERVERURL + "GetInfoServlet");
+                rp.addParameter("type", "BasicInfo");
+                rp.addParameter("token", UserInfoAuthentication.getTokeninfo(MainActivity.this, "token"));
+
+
+                x.http().post(rp, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String result) {
+                        Gson g = new Gson();
+
+                        User user = g.fromJson(result, User.class);
+                        System.out.println(user.getUserName());
+                        publishProgress(user);
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+
+
+                });
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(User... user) {
+            super.onProgressUpdate(user);
+            user_login.setText(user[0].getUserName());
+        }
+
+
+        @Override
+        protected void onPostExecute(User user) {
+            super.onPostExecute(user);
+
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+    }
+
+
+
 }

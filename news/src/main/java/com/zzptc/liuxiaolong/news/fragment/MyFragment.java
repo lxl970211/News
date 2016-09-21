@@ -1,6 +1,7 @@
 package com.zzptc.liuxiaolong.news.fragment;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,10 +12,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zzptc.liuxiaolong.news.R;
+import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
 import com.zzptc.liuxiaolong.news.activity.NewsDetail;
 import com.zzptc.liuxiaolong.news.adapter.RecylerViewAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
@@ -24,6 +27,7 @@ import com.zzptc.liuxiaolong.news.model.NewsData;
 import com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView;
 import com.zzptc.liuxiaolong.news.view.LoadFinshCallBack;
 
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -57,8 +61,7 @@ public class MyFragment extends Fragment implements GetNews.OnGetNewsListener{
 
     private GetNews getNews;
     private String newsType;
-
-    private ImageLoader imageLoader;
+    
     private LoadFinshCallBack mloadfinshcallBack;
 
     private int newsItemPosition;
@@ -164,7 +167,6 @@ public class MyFragment extends Fragment implements GetNews.OnGetNewsListener{
         recyclerView.setLayoutManager(manager);
         //设置recylerview适配器
         recyclerView.setAdapter(adapter);
-
         recyclerView.setLoadMoreListener(new AutoLoadRecyclerView.onLoadMoreListener() {
             @Override
             public void loadMore() {
@@ -221,7 +223,7 @@ public class MyFragment extends Fragment implements GetNews.OnGetNewsListener{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!isRefresh){
+                if (NetWorkStatus.getNetWorkType(x.app()) != 0 &&!isRefresh){
                     isRefresh = true;
                     new Thread(new Runnable() {
                         @Override
@@ -233,8 +235,7 @@ public class MyFragment extends Fragment implements GetNews.OnGetNewsListener{
                             } catch (MalformedURLException e) {
                                 e.printStackTrace();
                             }
-                            String json = getNews.getNewsJsonData(url);
-                            System.out.println(json);
+                            String json = getNews.getJson(url);
                             final List<NewsData> list = getNews.parsJsonToData(json);
                             getActivity().runOnUiThread(new Runnable() {
 
@@ -252,6 +253,9 @@ public class MyFragment extends Fragment implements GetNews.OnGetNewsListener{
                             });
                         }
                     }).start();
+                }else{
+                    Toast.makeText(x.app(), "网络连接失败", Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
                 }
 
             }
@@ -281,7 +285,6 @@ public class MyFragment extends Fragment implements GetNews.OnGetNewsListener{
         manager.scrollToPositionWithOffset(position, top);
 
     }
-
 
 
 
