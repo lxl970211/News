@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     android:clipToPadding="false"
-    tools:context="com.zzptc.liuxiaolong.news.activity.NewsDetail">
+    tools:context="com.zzptc.liuxiaolong.news.activity.Activity_NewsDetail">
     <WebView
         android:id="@+id/webview"
         android:layout_width="match_parent"

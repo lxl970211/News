@@ -1,7 +1,6 @@
 package com.zzptc.liuxiaolong.news.fragment;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -18,7 +17,7 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
-import com.zzptc.liuxiaolong.news.activity.NewsDetail;
+import com.zzptc.liuxiaolong.news.activity.Activity_NewsDetail;
 import com.zzptc.liuxiaolong.news.adapter.RecylerViewAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
@@ -27,7 +26,6 @@ import com.zzptc.liuxiaolong.news.model.NewsData;
 import com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView;
 import com.zzptc.liuxiaolong.news.view.LoadFinshCallBack;
 
-import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -181,7 +179,7 @@ public class MyFragment extends Fragment implements GetNews.OnGetNewsListener{
             public void OnItemClickListener(View itemView, int position, String newsUrl) {
                 newsItemPosition = position;
                 //跳转到新闻页面
-                Intent intent = new Intent(getContext(), NewsDetail.class);
+                Intent intent = new Intent(getContext(), Activity_NewsDetail.class);
                 intent.putExtra("url", newsUrl);
                 startActivityForResult(intent, StaticProperty.RETURN_NEWSLIST);
                 MyAnimator.openActivityAnim(getActivity());

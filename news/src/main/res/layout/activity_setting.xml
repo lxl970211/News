@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@android:color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.zzptc.liuxiaolong.news.activity.Setting">
+    tools:context="com.zzptc.liuxiaolong.news.activity.Activity_Setting">
             <android.support.v7.widget.Toolbar
                 android:id="@+id/setting_toolbar"
                 android:layout_width="match_parent"
@@ -28,14 +28,15 @@
         android:background="@android:color/holo_blue_light"
         >
 
+
         <ImageView
             android:id="@+id/iv_userhead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="110dp"
+            android:scaleType="fitXY"
+            android:layout_height="110dp"
             android:src="@mipmap/man"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            />
+            android:layout_centerHorizontal="true" />
         <TextView
             android:id="@+id/tv_userName"
             android:layout_below="@id/iv_userhead"
@@ -43,6 +44,7 @@
             android:layout_height="wrap_content"
             android:text="刘小龙"
             android:layout_centerHorizontal="true"/>
+
     </RelativeLayout>
 
     <LinearLayout
@@ -128,7 +130,8 @@
             <TextView
                 style="@style/settingBtnItemStyle"
                 android:text="@string/about_app"
-                />
+                android:layout_width="342dp"
+                android:id="@+id/textView" />
         </LinearLayout>
 
     </LinearLayout>

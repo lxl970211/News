@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.zhy.autolayout.config.AutoLayoutConifg;
 
 import org.xutils.x;
 
@@ -27,7 +28,7 @@ public class MyApplication extends Application {
         mContext = this;
         initImageLoader(this);
         x.Ext.init(this);
-
+        AutoLayoutConifg.getInstance().useDeviceSize();
     }
 
 

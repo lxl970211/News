@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -34,7 +35,7 @@ import org.xutils.x;
  * A simple {@link Fragment} subclass.
  */
 @ContentView(R.layout.fragment_login)
-public class FragmentLogin extends Fragment {
+public class Fragment_Login extends Fragment {
 
     @ViewInject(R.id.iv_userEmail_img)
     private ImageView ivEmail;
@@ -132,7 +133,7 @@ public class FragmentLogin extends Fragment {
             switch (Integer.parseInt(values[0])) {
                 case ResultCodes.LOGIN_AUCCESS:
                     Toast.makeText(getContext(), "登录成功", Toast.LENGTH_SHORT).show();
-
+                    //将登录信息保存到SharedPreferences
                     SharedPreferences.Editor editor = getContext().getSharedPreferences("token", Context.MODE_PRIVATE).edit();
                     editor.putString("token", values[1]);
                     editor.putString("email", et_userEmail.getText().toString());

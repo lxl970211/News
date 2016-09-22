@@ -15,7 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -26,12 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.zzptc.liuxiaolong.news.Utils.MyUtils;
+import com.zhy.autolayout.AutoLayoutActivity;
 import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
 import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
-import com.zzptc.liuxiaolong.news.activity.Login;
-import com.zzptc.liuxiaolong.news.activity.SearchNews;
-import com.zzptc.liuxiaolong.news.activity.Setting;
+import com.zzptc.liuxiaolong.news.activity.Activity_Login;
+import com.zzptc.liuxiaolong.news.activity.Activity_SearchNews;
+import com.zzptc.liuxiaolong.news.activity.Activity_Setting;
 import com.zzptc.liuxiaolong.news.adapter.MyFragmentPagerAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
@@ -50,7 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ContentView(R.layout.activity_main)
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AutoLayoutActivity implements View.OnClickListener{
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
     @ViewInject(R.id.tablelayout)
@@ -160,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     case R.id.setting:
 
-                        startActivity(new Intent(MainActivity.this, Setting.class));
+                        startActivity(new Intent(MainActivity.this, Activity_Setting.class));
                         overridePendingTransition(R.anim.activity_in_anim, R.anim.activity_out_anim);
 
 
@@ -232,19 +231,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             //搜索按钮监听
             case R.id.search_news:
-                startActivity(new Intent(this, SearchNews.class));
+                startActivity(new Intent(this, Activity_SearchNews.class));
                 MyAnimator.openActivityAnim(MainActivity.this);
                 break;
             //登录按钮监听
             case R.id.user_login:
-                startActivityForResult(new Intent(this, Login.class), 1);
+                startActivityForResult(new Intent(this, Activity_Login.class), 1);
                 MyAnimator.openActivityAnim(MainActivity.this);
                 break;
             //用户头像监听
             case R.id.user_head:
                 //token不存在则打开登录页面 存在则设置头像信息
                 if(!UserInfoAuthentication.tokenExists(this)){
-                    startActivity(new Intent(this, Login.class));
+                    startActivity(new Intent(this, Activity_Login.class));
                     MyAnimator.openActivityAnim(MainActivity.this);
                 }else{
 

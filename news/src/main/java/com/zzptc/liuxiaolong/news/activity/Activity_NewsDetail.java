@@ -2,18 +2,17 @@ package com.zzptc.liuxiaolong.news.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
-
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
-import com.zzptc.liuxiaolong.news.view.SlidingActivity;
+import com.zzptc.liuxiaolong.news.view.BaseActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,10 +27,12 @@ import java.io.IOException;
 
 
 @ContentView(R.layout.activity_news_detail)
-public class NewsDetail extends SlidingActivity {
+public class Activity_NewsDetail extends BaseActivity {
 
     @ViewInject(R.id.webview)
     private WebView webView;
+
+    private GestureDetector gestureDetector;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +40,40 @@ public class NewsDetail extends SlidingActivity {
 
 
         initdata();
-
+        init();
 
     }
 
+    public void init(){
+
+        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener(){
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                if (e2.getX() - e1.getX() >0 && (e1.getX() >=0 && e1.getX() <= 400)){
+                    if (Math.abs(e2.getX() - e1.getX()) > Math.abs(e2.getY() - e1.getY())
+                            && Math.abs(velocityX) > 1500){
+                        MyAnimator.closeActivityAnim(Activity_NewsDetail.this);
+                        finish();
+                        onBackPressed();
+                    }
+
+                }
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
+        });
+
+
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return false;
+            }
+        });
+
+
+    }
 
 
     public void initdata(){
@@ -110,6 +141,6 @@ public class NewsDetail extends SlidingActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        MyAnimator.closeActivityAnim(NewsDetail.this);
+        MyAnimator.closeActivityAnim(Activity_NewsDetail.this);
     }
 }

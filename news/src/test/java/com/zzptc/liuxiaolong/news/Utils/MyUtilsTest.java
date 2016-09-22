@@ -20,8 +20,7 @@ public class MyUtilsTest {
 
     @Test
     public void tokenTest(){
-//        System.out.println(myUtils.getMac());nulld3d221e33b16134a43bc1e4823a88320
-        System.out.println(myUtils.MD5("刘小龙"));
+
     }
 
 }

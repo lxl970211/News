@@ -39,7 +39,7 @@ import org.xutils.x;
  * A simple {@link Fragment} subclass.
  */
 @ContentView(R.layout.fragment_register)
-public class FragmentRegister extends Fragment{
+public class Fragment_Register extends Fragment{
 
     @ViewInject(R.id.et_register_userName)
     private EditText reg_userName;
@@ -293,7 +293,7 @@ public class FragmentRegister extends Fragment{
 
 
     public void returnloginFragment(){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.login_content, new FragmentLogin()).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.login_content, new Fragment_Login()).commit();
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.login_toolbar);
         toolbar.setTitle(R.string.login);
         TextView register = (TextView) getActivity().findViewById(R.id.tv_register);

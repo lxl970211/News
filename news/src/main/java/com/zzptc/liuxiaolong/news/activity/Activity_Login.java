@@ -1,30 +1,17 @@
 package com.zzptc.liuxiaolong.news.activity;
 
-import android.animation.AnimatorSet;
-import android.content.Context;
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.view.InflateException;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
-import com.zzptc.liuxiaolong.news.fragment.FragmentLogin;
-import com.zzptc.liuxiaolong.news.fragment.FragmentRegister;
+import com.zzptc.liuxiaolong.news.fragment.Fragment_Login;
+import com.zzptc.liuxiaolong.news.fragment.Fragment_Register;
+import com.zzptc.liuxiaolong.news.view.BaseActivity;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -32,13 +19,14 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 @ContentView(R.layout.activity_login)
-public class Login extends AppCompatActivity {
+public class Activity_Login extends BaseActivity{
 
     @ViewInject(R.id.login_toolbar)
     private Toolbar toolbar;
     @ViewInject(R.id.tv_register)
     private TextView register;
-    FragmentRegister fragmentRegister;
+    Fragment_Register fragmentRegister;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,12 +43,15 @@ public class Login extends AppCompatActivity {
             }
         });
 
+
+
     }
+
 
 
     public void initFragment(){
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.login_content, new FragmentLogin(), "login").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.login_content, new Fragment_Login(), "login").commit();
         //设置toolbar title
         toolbar.setTitle(R.string.login);
         //显示注册按钮
@@ -75,7 +66,7 @@ public class Login extends AppCompatActivity {
         switch (v.getId()){
             case R.id.tv_register:
                 if (fragmentRegister == null){
-                    fragmentRegister = new FragmentRegister();
+                    fragmentRegister = new Fragment_Register();
                 }
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.login_content, fragmentRegister,"register").commit();
@@ -87,7 +78,6 @@ public class Login extends AppCompatActivity {
                 break;
         }
     }
-
     //返回键监听
     @Override
     public void onBackPressed() {

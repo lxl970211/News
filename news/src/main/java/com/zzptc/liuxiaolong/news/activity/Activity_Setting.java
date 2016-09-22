@@ -2,7 +2,6 @@ package com.zzptc.liuxiaolong.news.activity;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -14,8 +13,7 @@ import android.widget.Toast;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.FileUtils;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
-import com.zzptc.liuxiaolong.news.content.StaticProperty;
-import com.zzptc.liuxiaolong.news.view.SlidingActivity;
+import com.zzptc.liuxiaolong.news.view.BaseActivity;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -23,7 +21,7 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 @ContentView(R.layout.activity_setting)
-public class Setting extends SlidingActivity{
+public class Activity_Setting extends BaseActivity {
     @ViewInject(R.id.setting_toolbar)
     private Toolbar toolbar;
     @ViewInject(R.id.user_setting)
@@ -59,7 +57,7 @@ public class Setting extends SlidingActivity{
             @Override
             public void onClick(View v) {
                 finish();
-                MyAnimator.openActivityAnim(Setting.this);
+                MyAnimator.openActivityAnim(Activity_Setting.this);
             }
         });
     }
@@ -74,17 +72,17 @@ public class Setting extends SlidingActivity{
     private void getEvent(View v){
         switch (v.getId()){
             case R.id.about_app:
-                Intent openAbout_app = new Intent(x.app(), Feedback.class);
+                Intent openAbout_app = new Intent(x.app(), Activity_Feedback.class);
                 openAbout_app.setAction("aboutapp");
                 startActivity(openAbout_app);
-                MyAnimator.openActivityAnim(Setting.this);
+                MyAnimator.openActivityAnim(Activity_Setting.this);
 
                 break;
             case R.id.Feedback:
-                Intent feedback = new Intent(x.app(), Feedback.class);
+                Intent feedback = new Intent(x.app(), Activity_Feedback.class);
                 feedback.setAction("feedback");
                 startActivity(feedback);
-                MyAnimator.openActivityAnim(Setting.this);
+                MyAnimator.openActivityAnim(Activity_Setting.this);
                 break;
 
 
