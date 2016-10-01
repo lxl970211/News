@@ -41,7 +41,7 @@ public class MyApplication extends Application {
      */
     private void initImageLoader(Context context) {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .threadPriority(1)
                 .denyCacheImageMultipleSizesInMemory()
                 .diskCacheSize(30)
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())

@@ -17,7 +17,6 @@ public class NewsData implements Serializable {
     private String thumbnail_pic_s;
     private String url;
     private String thumbnail_pic_s03;
-
     public String getTitle() {
         return title;
     }
@@ -73,4 +72,5 @@ public class NewsData implements Serializable {
     public void setThumbnail_pic_s03(String thumbnail_pic_s03) {
         this.thumbnail_pic_s03 = thumbnail_pic_s03;
     }
+
 }

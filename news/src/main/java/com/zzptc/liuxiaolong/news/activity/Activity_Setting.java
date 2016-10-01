@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.FileUtils;
+import com.zzptc.liuxiaolong.news.Utils.MyAsyncTask;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.view.BaseActivity;
 
@@ -21,7 +22,7 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 @ContentView(R.layout.activity_setting)
-public class Activity_Setting extends BaseActivity {
+public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetUserInfoListener{
     @ViewInject(R.id.setting_toolbar)
     private Toolbar toolbar;
     @ViewInject(R.id.user_setting)
@@ -35,9 +36,10 @@ public class Activity_Setting extends BaseActivity {
     private TextView clearsize;
     @ViewInject(R.id.Feedback)
     private LinearLayout feedback;
-
+    @ViewInject(R.id.tv_userName)
+    private TextView tv_userName;
     private Handler handler;
-
+    private MyAsyncTask myAsyncTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,10 @@ public class Activity_Setting extends BaseActivity {
     }
 
     public void init(){
-
+        myAsyncTask = new MyAsyncTask(this);
+        myAsyncTask.setOnGetUserInfoListener(this);
+        myAsyncTask.getinfo();
+        //半透明
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         handler = new Handler();
@@ -57,7 +62,7 @@ public class Activity_Setting extends BaseActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                MyAnimator.openActivityAnim(Activity_Setting.this);
+                MyAnimator.closeActivityAnim(Activity_Setting.this);
             }
         });
     }
@@ -126,4 +131,8 @@ public class Activity_Setting extends BaseActivity {
         MyAnimator.closeActivityAnim(this);
     }
 
+    @Override
+    public void OnGetUserInfoListener(String name) {
+        tv_userName.setText(name);
+    }
 }

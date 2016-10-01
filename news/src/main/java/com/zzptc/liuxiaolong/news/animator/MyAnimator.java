@@ -1,21 +1,9 @@
 package com.zzptc.liuxiaolong.news.animator;
 
-import android.animation.Animator;
-import android.animation.PropertyValuesHolder;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.Handler;
-import android.widget.ImageView;
-
 import com.zzptc.liuxiaolong.news.R;
-import com.zzptc.liuxiaolong.news.Utils.FileUtils;
-import com.zzptc.liuxiaolong.news.content.StaticProperty;
 
-import java.util.BitSet;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Created by lxl97 on 2016/7/23.

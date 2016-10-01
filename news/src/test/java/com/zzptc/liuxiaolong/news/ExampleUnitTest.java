@@ -2,6 +2,9 @@ package com.zzptc.liuxiaolong.news;
 
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.junit.Assert.*;
 
 /**
@@ -11,5 +14,13 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
+    }
+
+
+    @Test
+    public void time(){
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm");
+
+        System.out.println(sdf.format(new Date()));
     }
 }

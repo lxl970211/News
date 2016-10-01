@@ -2,13 +2,16 @@ package com.zzptc.liuxiaolong.news.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.zzptc.liuxiaolong.news.Utils.FileUtils;
+import com.zzptc.liuxiaolong.news.Utils.PushData;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
+import com.zzptc.liuxiaolong.news.model.NewsData;
+
+import org.xutils.x;
 
 /**
  * Created by lxl97 on 2016/8/5.

@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zzptc.liuxiaolong.news.R;
+import com.zzptc.liuxiaolong.news.Utils.LoginRegister;
 import com.zzptc.liuxiaolong.news.Utils.MD5;
 import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
@@ -35,7 +35,7 @@ import org.xutils.x;
  * A simple {@link Fragment} subclass.
  */
 @ContentView(R.layout.fragment_login)
-public class Fragment_Login extends Fragment {
+public class Fragment_Login extends Fragment implements LoginRegister.OnLoginRegisterListener{
 
     @ViewInject(R.id.iv_userEmail_img)
     private ImageView ivEmail;
@@ -50,7 +50,7 @@ public class Fragment_Login extends Fragment {
     @ViewInject(R.id.btn_login)
     private Button submit;
 
-
+    private LoginRegister loginRegister;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,7 +63,8 @@ public class Fragment_Login extends Fragment {
 
 
     public void init(){
-
+        loginRegister = new LoginRegister();
+        loginRegister.setOnLoginRegisterListener(this);
         //修改icon颜色
         ivEmail.setColorFilter(getResources().getColor(R.color.blue));
         ivPwd.setColorFilter(getResources().getColor(R.color.blue));
@@ -75,82 +76,41 @@ public class Fragment_Login extends Fragment {
         switch (view.getId()){
             case R.id.btn_login:
                 User user = new User();
+                user.setType("login");
                 user.setUserEmail(et_userEmail.getText().toString());
                 String pwd = MD5.MD5(et_userPassword.getText().toString());
                 user.setUserPassword(pwd);
-                new Login().execute(user);
-
+                loginRegister.login(user);
                 break;
 
         }
 
     }
 
+    @Override
+    public void OnGetServerResponseCodesListener(int ResponseCodes, String token) {
+        System.out.println(ResponseCodes);
+        switch (ResponseCodes){
+            case ResultCodes.LOGIN_AUCCESS:
+                Toast.makeText(getContext(), "登录成功", Toast.LENGTH_SHORT).show();
+                //将登录信息保存到SharedPreferences
+                SharedPreferences.Editor editor = getContext().getSharedPreferences("token", Context.MODE_PRIVATE).edit();
+                editor.clear();
+                editor.putString("token", token);
+                editor.putString("email", et_userEmail.getText().toString());
+                editor.putString("password", MD5.MD5(et_userPassword.getText().toString()));
+                editor.commit();
+                //设置返回结果码
+                getActivity().setResult(ResultCodes.LOGIN_AUCCESS);
+                //登录成功关闭登录界面
+                getActivity().finish();
+                break;
+            case ResultCodes.LOGIN_ERROR:
+                Toast.makeText(getContext(), "请输入正确的用户名和密码", Toast.LENGTH_SHORT).show();
 
-    class Login extends AsyncTask<User, String , Void>{
-
-
-        @Override
-        protected Void doInBackground(User... params) {
-
-            RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"LoginServlet");
-            rp.addParameter("user_email", params[0].getUserEmail());
-            rp.addParameter("user_password", params[0].getUserPassword());
-            rp.addParameter("token", MyUtils.myToken(params[0].getUserPassword()));
-            x.http().post(rp, new Callback.CommonCallback<String>() {
-                @Override
-                public void onCancelled(CancelledException cex) {
-
-                }
-
-                @Override
-                public void onSuccess(String result) {
-                    Gson gson = new Gson();
-
-                    ResultData res =gson.fromJson(result, ResultData.class);
-                    publishProgress(res.getStatus(), res.getToken());
-
-                }
-
-                @Override
-                public void onError(Throwable ex, boolean isOnCallback) {
-
-                }
-
-                @Override
-                public void onFinished() {
-
-                }
-            });
-
-            return null;
+                break;
         }
 
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-
-            switch (Integer.parseInt(values[0])) {
-                case ResultCodes.LOGIN_AUCCESS:
-                    Toast.makeText(getContext(), "登录成功", Toast.LENGTH_SHORT).show();
-                    //将登录信息保存到SharedPreferences
-                    SharedPreferences.Editor editor = getContext().getSharedPreferences("token", Context.MODE_PRIVATE).edit();
-                    editor.putString("token", values[1]);
-                    editor.putString("email", et_userEmail.getText().toString());
-                    editor.putString("password", MD5.MD5(et_userPassword.getText().toString()));
-                    editor.commit();
-                    //设置返回结果码
-                    getActivity().setResult(ResultCodes.LOGIN_AUCCESS);
-                    //登录成功关闭登录界面
-                    getActivity().finish();
-                    break;
-                case ResultCodes.LOGIN_ERROR:
-                    Toast.makeText(getContext(), "请输入正确的用户名和密码", Toast.LENGTH_SHORT).show();
-
-                    break;
-            }
-        }
     }
-
 
 }

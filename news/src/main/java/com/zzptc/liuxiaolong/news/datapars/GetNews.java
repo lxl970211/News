@@ -36,14 +36,12 @@ import java.util.concurrent.ExecutorService;
  */
 public class GetNews {
 
-    private static String result;
 
 
 
     //长时间缓存
     private static final int CACHE_LONG_TIME = 3600000;
 
-    private ExecutorService executorService;
 
     public static final String SDCardPath = Environment.getExternalStorageDirectory() + File.separator;
     //文件路径

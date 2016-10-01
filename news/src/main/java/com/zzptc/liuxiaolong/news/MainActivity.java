@@ -17,7 +17,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -26,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zhy.autolayout.AutoLayoutActivity;
+import com.zzptc.liuxiaolong.news.Utils.MyAsyncTask;
 import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
 import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.activity.Activity_Login;
@@ -35,6 +39,7 @@ import com.zzptc.liuxiaolong.news.adapter.MyFragmentPagerAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
+import com.zzptc.liuxiaolong.news.datapars.GetNews;
 import com.zzptc.liuxiaolong.news.fragment.MyFragment;
 import com.zzptc.liuxiaolong.news.javabean.User;
 import com.zzptc.liuxiaolong.news.service.MyService;
@@ -45,11 +50,14 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @ContentView(R.layout.activity_main)
-public class MainActivity extends AutoLayoutActivity implements View.OnClickListener{
+public class MainActivity extends AutoLayoutActivity implements View.OnClickListener, MyAsyncTask.OnGetUserInfoListener{
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
     @ViewInject(R.id.tablelayout)
@@ -79,7 +87,7 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
     public static final String[] pinyintitles = {"top", "yule", "guonei", "shehui", "tiyu", "junshi", "caijing", "keji", "guoji", "shishang"};
 
     private Handler handler;
-
+    private MyAsyncTask myAsyncTask;
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +112,6 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
         initListener();
         initData();
 
-        System.out.println(NetWorkStatus.getNetWorkType(this));
 
     }
 
@@ -113,9 +120,10 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
 
     public void init(){
         handler = new Handler();
-        if (UserInfoAuthentication.tokenExists(this)){
-            new GetUserInfo().execute(UserInfoAuthentication.getTokeninfo(this, "token"));
-        }
+
+        myAsyncTask = new MyAsyncTask(this);
+        myAsyncTask.setOnGetUserInfoListener(this);
+        myAsyncTask.getinfo();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -137,6 +145,9 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
         user_head.setOnClickListener(this);
         user_login.setOnClickListener(this);
         search_news.setOnClickListener(this);
+
+
+
     }
 
     public void initListener(){
@@ -179,6 +190,7 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
     /**
      * 初始化数据
      */
+    private boolean misscrolled = false;
     private void initData(){
 
         List<Fragment> fragmentList = new ArrayList<>();
@@ -188,13 +200,41 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
         }
         MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList, titles, this);
         viewPager.setAdapter(adapter);
+
         //绑定viewpager
         tablayout.setupWithViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                switch (state){
+                    case ViewPager.SCROLL_STATE_IDLE:
+                        if (viewPager.getCurrentItem() == 0 && !misscrolled){
+                            drawer.openDrawer(Gravity.LEFT);
+                        }
+                        misscrolled = true;
+                        break;
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                        misscrolled = false;
+                        break;
+                    case ViewPager.SCROLL_STATE_SETTLING:
+                        misscrolled = true;
+                        break;
+                }
+            }
+        });
+
 
     }
-
-
-
 
 
 
@@ -241,13 +281,15 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
                 break;
             //用户头像监听
             case R.id.user_head:
-                //token不存在则打开登录页面 存在则设置头像信息
+                //token不存在则打开登录页面 存在则打开设置页面
                 if(!UserInfoAuthentication.tokenExists(this)){
+                    //打开登录页面
                     startActivity(new Intent(this, Activity_Login.class));
                     MyAnimator.openActivityAnim(MainActivity.this);
                 }else{
-
-                    Toast.makeText(MainActivity.this, "touxiang", Toast.LENGTH_SHORT).show();
+                    //打开设置页面
+                    startActivity(new Intent(this, Activity_Setting.class));
+                    MyAnimator.openActivityAnim(MainActivity.this);
                 }
                 break;
         }
@@ -258,72 +300,10 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == ResultCodes.LOGIN_AUCCESS){
-            if (UserInfoAuthentication.tokenExists(this)){
-                new GetUserInfo().execute(UserInfoAuthentication.getTokeninfo(this, "token"));
-            }
+           myAsyncTask.getinfo();
         }
     }
 
-
-    private class GetUserInfo extends AsyncTask<String, User, User>{
-        @Override
-        protected User doInBackground(String... params) {
-            if (UserInfoAuthentication.tokenExists(MainActivity.this)){
-                String name = UserInfoAuthentication.getTokeninfo(MainActivity.this, "name");
-                User user = new User();
-                user.setUserName(name);
-                publishProgress(user);
-            }else {
-
-                RequestParams rp = new RequestParams(StaticProperty.SERVERURL + "GetInfoServlet");
-                rp.addParameter("type", "BasicInfo");
-                rp.addParameter("token", UserInfoAuthentication.getTokeninfo(MainActivity.this, "token"));
-
-
-                x.http().post(rp, new Callback.CommonCallback<String>() {
-                    @Override
-                    public void onCancelled(CancelledException cex) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(String result) {
-                        Gson g = new Gson();
-
-                        User user = g.fromJson(result, User.class);
-                        System.out.println(user.getUserName());
-                        publishProgress(user);
-                    }
-
-                    @Override
-                    public void onError(Throwable ex, boolean isOnCallback) {
-
-                    }
-
-                    @Override
-                    public void onFinished() {
-
-                    }
-
-
-                });
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(User... user) {
-            super.onProgressUpdate(user);
-            user_login.setText(user[0].getUserName());
-        }
-
-
-        @Override
-        protected void onPostExecute(User user) {
-            super.onPostExecute(user);
-
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -333,5 +313,8 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
     }
 
 
-
+    @Override
+    public void OnGetUserInfoListener(String name) {
+        user_login.setText(name);
+    }
 }

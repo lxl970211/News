@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.CodeUtils;
+import com.zzptc.liuxiaolong.news.Utils.LoginRegister;
 import com.zzptc.liuxiaolong.news.Utils.MD5;
 import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
@@ -39,7 +40,7 @@ import org.xutils.x;
  * A simple {@link Fragment} subclass.
  */
 @ContentView(R.layout.fragment_register)
-public class Fragment_Register extends Fragment{
+public class Fragment_Register extends Fragment implements LoginRegister.OnLoginRegisterListener{
 
     @ViewInject(R.id.et_register_userName)
     private EditText reg_userName;
@@ -76,6 +77,8 @@ public class Fragment_Register extends Fragment{
 
 
     private CodeUtils codeUtils;
+
+    private LoginRegister loginRegister;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,7 +110,9 @@ public class Fragment_Register extends Fragment{
         Bitmap bitmap = codeUtils.createBitmap();
 
         codes.setImageBitmap(bitmap);
-
+        //
+        loginRegister = new LoginRegister();
+        loginRegister.setOnLoginRegisterListener(this);
     }
 
     /**
@@ -141,11 +146,12 @@ public class Fragment_Register extends Fragment{
                     break;
                 //邮箱
                 case R.id.et_register_email:
+
                     if (reg_email.getText().toString() != null && !"".equals(reg_email.getText().toString())){
                         User user = new User();
                         user.setType("email");
                         user.setUserEmail(reg_email.getText().toString());
-                        new CheckEmail().execute(user);
+                        loginRegister.register(user);
                     }
                     break;
 
@@ -174,21 +180,19 @@ public class Fragment_Register extends Fragment{
             //如果表单内容正确则提交注册
             if (verificationform()) {
 
-
                 User user = new User();
                 user.setType("register");
                 user.setUserName(reg_userName.getText().toString());
                 user.setUserEmail(reg_email.getText().toString());
-
                 //MD5加密密码
                 user.setUserPassword(MD5.parseStrToMd5L32(reg_pwd.getText().toString()));
-
-                new CheckEmail().execute(user);
+                loginRegister.register(user);
+                resetFocuse(true);
 
             } else {
                 Toast.makeText(getContext(), "cuowu", Toast.LENGTH_SHORT).show();
+                resetFocuse(true);
             }
-
                 break;
 
             case R.id.img_Codes:
@@ -198,95 +202,39 @@ public class Fragment_Register extends Fragment{
         }
 
     }
+    //注册结果
+    @Override
+    public void OnGetServerResponseCodesListener(int ResponseCodes, String token) {
+        switch (ResponseCodes){
+            case ResultCodes.EMAILL_EXIST:
+                //邮箱已存在
+                emailprompt.setText("邮箱已存在");
+                emailcorrect = false;
+                resetFocuse(true);
+                break;
+            case ResultCodes.EMAILL_UNEXIST:
+                //邮箱不存在，可以使用
+                emailprompt.setText(null);
+                emailcorrect = true;
+                resetFocuse(true);
+                break;
+            case ResultCodes.EMAIL_ERROR:
+                emailprompt.setText("请输入正确的邮箱");
+                emailcorrect = false;
+                resetFocuse(true);
+                break;
+            case ResultCodes.REGISTER_AUCCESS:
+                Toast.makeText(getActivity(), "注册成功", Toast.LENGTH_SHORT).show();
+                resetFocuse(true);
+                returnloginFragment();
+                //注册成功
+                break;
 
-
-    /**
-     *验证邮箱 邮箱错误：3，已存在：1 可以使用：0
-     */
-    class CheckEmail extends AsyncTask<User, Integer, Void>{
-
-        @Override
-        protected Void doInBackground(User... user) {
-
-
-            if (!MyUtils.EditTextFormat(user[0].getUserEmail(), StaticProperty.EMAIL_REGULAT_EXPRESSIONS)){
-                publishProgress(ResultCodes.EMAIL_ERROR);
-            }else {
-
-                RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"RegisterServlet");
-                //请求参数
-                rp.addParameter("type", user[0].getType());
-                rp.addParameter("user_name", user[0].getUserName());
-                rp.addParameter("user_email", user[0].getUserEmail());
-                rp.addParameter("user_password", user[0].getUserPassword());
-
-                x.http().post(rp, new Callback.CommonCallback<String>() {
-                    @Override
-                    public void onSuccess(String result) {
-                        Gson g = new Gson();
-                        ResultData lr = g.fromJson(result, ResultData.class);
-                        publishProgress(Integer.parseInt(lr.getStatus()));
-                    }
-
-                    @Override
-                    public void onError(Throwable ex, boolean isOnCallback) {
-                    }
-
-                    @Override
-                    public void onCancelled(CancelledException cex) {
-                    }
-
-                    @Override
-                    public void onFinished() {
-                    }
-                });
-
-            }
-            return null;
-        }
-
-
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-
-            switch (values[0]){
-                case ResultCodes.EMAILL_EXIST:
-                    //邮箱已存在
-                    emailprompt.setText("邮箱已存在");
-                    emailcorrect = false;
-                    resetFocuse(true);
-                    break;
-                case ResultCodes.EMAIL_ERROR:
-                    //邮箱错误
-                    emailprompt.setText("请输入正确的邮箱");
-                    emailcorrect = false;
-                    resetFocuse(true);
-                    break;
-
-                case ResultCodes.EMAILL_UNEXIST:
-                    //邮箱不存在，可以使用
-                    emailprompt.setText(null);
-                    emailcorrect = true;
-                    resetFocuse(true);
-                    break;
-
-                case ResultCodes.REGISTER_AUCCESS:
-                    Toast.makeText(getActivity(), "注册成功", Toast.LENGTH_SHORT).show();
-                    resetFocuse(true);
-                    returnloginFragment();
-                    //注册成功
-                    break;
-
-                case ResultCodes.REGISTER_FAILED:
-                    Toast.makeText(getActivity(), "注册失败", Toast.LENGTH_SHORT).show();
-                    resetFocuse(true);
-                    //注册失败
-                    break;
-            }
-
-
+            case ResultCodes.REGISTER_FAILED:
+                Toast.makeText(getActivity(), "注册失败", Toast.LENGTH_SHORT).show();
+                resetFocuse(true);
+                //注册失败
+                break;
         }
 
     }

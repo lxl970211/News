@@ -176,11 +176,11 @@ public class MyFragment extends Fragment implements GetNews.OnGetNewsListener{
         adapter.setOnItemClickListener(new RecylerViewAdapter.OnRecylerAdapterListener() {
 
             @Override
-            public void OnItemClickListener(View itemView, int position, String newsUrl) {
+            public void OnItemClickListener(View itemView, int position, NewsData newsData) {
                 newsItemPosition = position;
                 //跳转到新闻页面
                 Intent intent = new Intent(getContext(), Activity_NewsDetail.class);
-                intent.putExtra("url", newsUrl);
+                intent.putExtra("newsData", newsData);
                 startActivityForResult(intent, StaticProperty.RETURN_NEWSLIST);
                 MyAnimator.openActivityAnim(getActivity());
 

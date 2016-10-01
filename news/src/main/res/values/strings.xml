@@ -31,4 +31,5 @@
     <string name="confirmPassword">确认密码</string>
     <string name="sendCodes">发送验证码</string>
     <string name="enterCodes">输入验证码</string>
+    <string name="writereview">写评论</string>
 </resources>

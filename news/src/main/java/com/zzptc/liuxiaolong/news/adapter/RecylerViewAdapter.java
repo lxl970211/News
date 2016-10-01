@@ -21,8 +21,6 @@ import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.FileUtils;
 import com.zzptc.liuxiaolong.news.model.NewsData;
 
-import org.xutils.image.ImageOptions;
-import org.xutils.x;
 
 import java.io.File;
 import java.util.List;
@@ -43,7 +41,7 @@ public class RecylerViewAdapter extends RecyclerView.Adapter<RecylerViewAdapter.
 
     //点击监听接口
     public interface OnRecylerAdapterListener{
-        void OnItemClickListener(View itemView, int position, String NewsUrl);
+        void OnItemClickListener(View itemView, int position, NewsData newsData);
     }
 
     private OnRecylerAdapterListener onRecylerAdapterListener;
@@ -102,7 +100,7 @@ public class RecylerViewAdapter extends RecyclerView.Adapter<RecylerViewAdapter.
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onRecylerAdapterListener.OnItemClickListener(holder.itemView, position, newsData.getUrl());
+                        onRecylerAdapterListener.OnItemClickListener(holder.itemView, position, newsData);
                     }
                 });
 
