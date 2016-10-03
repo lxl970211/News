@@ -16,7 +16,7 @@
         app:navigationIcon="@mipmap/back"
         app:title="@string/login"
         app:titleTextColor="@android:color/white"
-        app:titleTextAppearance="@style/toolbarStyle"
+        app:titleTextAppearance="@style/TitleSize"
         >
         <TextView
             android:id="@+id/tv_register"

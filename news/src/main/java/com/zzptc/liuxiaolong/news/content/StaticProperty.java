@@ -23,7 +23,7 @@ public class StaticProperty {
     //邮箱正则表达式
     public static final String EMAIL_REGULAT_EXPRESSIONS = "^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
     //服务器URL
-    public static final String SERVERURL = "http://192.168.99.105:8080/News/servlet/";
+    public static final String SERVERURL = "http://192.168.99.231:8080/News/servlet/";
     //新闻SDKURL
     public static final String NEWS_SDK_URL = "http://v.juhe.cn/toutiao/index";
     //注册servlet

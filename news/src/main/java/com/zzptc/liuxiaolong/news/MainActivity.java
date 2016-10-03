@@ -3,6 +3,7 @@ package com.zzptc.liuxiaolong.news;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -35,6 +36,7 @@ import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.activity.Activity_Login;
 import com.zzptc.liuxiaolong.news.activity.Activity_SearchNews;
 import com.zzptc.liuxiaolong.news.activity.Activity_Setting;
+import com.zzptc.liuxiaolong.news.activity.MyActivity;
 import com.zzptc.liuxiaolong.news.adapter.MyFragmentPagerAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
@@ -96,7 +98,6 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         }
             //如果系统版本为6.0则向用户取要读取内存卡权限
@@ -119,11 +120,9 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
 
 
     public void init(){
+
         handler = new Handler();
 
-        myAsyncTask = new MyAsyncTask(this);
-        myAsyncTask.setOnGetUserInfoListener(this);
-        myAsyncTask.getinfo();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -159,19 +158,28 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
             public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
                 switch (id){
-                    case R.id.my_reviews:
-                        drawer.closeDrawers();
+                    case R.id.my_comment:
+                        //跳转到我的评论页面
+                        Intent intent = new Intent(MainActivity.this, MyActivity.class);
+                        intent.setAction("my_comment");
+                        startActivity(intent);
+                        //跳转动画
+                        MyAnimator.openActivityAnim(MainActivity.this);
                         break;
 
                     case R.id.my_collect:
-                        //关闭侧边菜单
-                        drawer.closeDrawers();
+                        //跳转到我的收藏页面
+                        Intent intent1 = new Intent(MainActivity.this, MyActivity.class);
+                        intent1.setAction("my_collect");
+                        startActivity(intent1);
+                        //跳转动画
+                        MyAnimator.openActivityAnim(MainActivity.this);
                         break;
 
                     case R.id.setting:
-
+                        //跳转到设置页面
                         startActivity(new Intent(MainActivity.this, Activity_Setting.class));
-                        overridePendingTransition(R.anim.activity_in_anim, R.anim.activity_out_anim);
+                        MyAnimator.openActivityAnim(MainActivity.this);
 
 
                         break;
@@ -309,7 +317,9 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
 
-
+        myAsyncTask = new MyAsyncTask(this);
+        myAsyncTask.setOnGetUserInfoListener(this);
+        myAsyncTask.getinfo();
     }
 
 

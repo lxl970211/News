@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,8 +52,6 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
         myAsyncTask = new MyAsyncTask(this);
         myAsyncTask.setOnGetUserInfoListener(this);
         myAsyncTask.getinfo();
-        //半透明
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         handler = new Handler();
         setSupportActionBar(toolbar);

@@ -31,7 +31,7 @@
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
     </style>
 
-    <style name="toolbarStyle">
+    <style name="TitleSize">
         <item name="android:textSize">17sp</item>
     </style>
 
@@ -85,4 +85,5 @@
         <item name="android:textColor">@android:color/holo_red_light</item>
 
     </style>
+
 </resources>

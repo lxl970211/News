@@ -1,6 +1,7 @@
 package com.zzptc.liuxiaolong.news.Utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
@@ -80,6 +81,9 @@ public class MyAsyncTask {
         protected void onProgressUpdate(String... str) {
             super.onProgressUpdate(str);
             if ( onGetUserInfoListener != null){
+                SharedPreferences.Editor editor = context.getSharedPreferences("token", Context.MODE_PRIVATE).edit();
+                editor.putString("name", str[0]);
+                editor.commit();
                 onGetUserInfoListener.OnGetUserInfoListener(str[0]);
             }
         }

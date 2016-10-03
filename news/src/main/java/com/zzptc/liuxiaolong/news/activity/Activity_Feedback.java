@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -41,7 +40,6 @@ public class Activity_Feedback extends BaseActivity {
         Intent intent = getIntent();
         if (intent.getAction().equals("feedback")) {
             x.view().inject(this);
-            init();
             initListener();
         } else {
             setContentView(R.layout.activity_about_app);
@@ -50,12 +48,6 @@ public class Activity_Feedback extends BaseActivity {
     }
 
 
-    public void init() {
-        //半透明导航栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
-
-    }
 
     @Event(R.id.btn_submit)
     private void getEvent(View v) {

@@ -14,6 +14,7 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -36,6 +37,7 @@ public class PushData {
 
     public interface OnPushInfoListener{
         void OnPushCollectNewsListener(int status);
+        void OnGetUserCollectNewsListListener(String json);
     }
 
     private OnPushInfoListener onPushInfoListener;
@@ -47,9 +49,9 @@ public class PushData {
         new PushInfo().execute(new Object[]{newsdata, type});
     }
 
-    class PushInfo extends AsyncTask<Object, Integer, Void>{
+    class PushInfo extends AsyncTask<Object, String, Void>{
         @Override
-        protected Void doInBackground(Object... params) {
+        protected Void doInBackground(final Object... params) {
             NewsData newsData = (NewsData) params[0];
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String time = sdf.format(new Date());
@@ -71,7 +73,13 @@ public class PushData {
                 rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
                 rp.addParameter("newsUrl", newsData.getUrl());
 
+            }else if ("getCollectNewsList".equals(params[1])){
+
+                rp.addParameter("type", "getCollectNewsList");
+                rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
+
             }
+
             x.http().post(rp, new Callback.CommonCallback<String>() {
                 @Override
                 public void onCancelled(CancelledException cex) {
@@ -85,8 +93,12 @@ public class PushData {
 
                 @Override
                 public void onSuccess(String result) {
-                    ResultData res = gson.fromJson(result, ResultData.class);
-                    publishProgress(res.getStatus());
+                    if (!"getCollectNewsList".equals(params[1])) {
+                        ResultData res = gson.fromJson(result, ResultData.class);
+                        publishProgress(String.valueOf(res.getStatus()), "");
+                    }else{
+                        publishProgress(result, "getCollectNewsList");
+                    }
                 }
 
                 @Override
@@ -98,10 +110,22 @@ public class PushData {
         }
 
         @Override
-        protected void onProgressUpdate(Integer... values) {
+        protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-            if (onPushInfoListener != null){
-                onPushInfoListener.OnPushCollectNewsListener(values[0]);
+            if (values[1] == null || values[1].equals("")) {
+                if (onPushInfoListener != null) {
+                    onPushInfoListener.OnPushCollectNewsListener(Integer.parseInt(values[0]));
+                }
+            }else {
+                if (onPushInfoListener != null) {
+                    try {
+                        String json = new String(values[0].getBytes(), "utf-8");
+                        onPushInfoListener.OnGetUserCollectNewsListListener(json);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+
+                }
             }
         }
     }

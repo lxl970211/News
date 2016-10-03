@@ -79,7 +79,8 @@ public class LoginRegister {
                 public void onSuccess(String result) {
                         ResultData lr = gson.fromJson(result, ResultData.class);
                     if ("email".equals(user.getType())) {
-                        publishProgress(String.valueOf(lr.getStatus()));
+                        publishProgress(String.valueOf(lr.getStatus()), null);
+                        System.out.println(lr.getStatus());
                     }else{
                         publishProgress(String.valueOf(lr.getStatus()), lr.getToken());
                     }
@@ -104,8 +105,15 @@ public class LoginRegister {
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-            if (onloginregisterlistener != null){
-                onloginregisterlistener.OnGetServerResponseCodesListener(Integer.parseInt(values[0]), values[1]);
+            System.out.println(values[1]);
+            if (values[1] != null) {
+                System.out.println("!null"+ values[0]);
+                if (onloginregisterlistener != null) {
+                    onloginregisterlistener.OnGetServerResponseCodesListener(Integer.parseInt(values[0]), values[1]);
+                }
+            }else{
+                System.out.println("null"+ values[0]);
+                onloginregisterlistener.OnGetServerResponseCodesListener(Integer.parseInt(values[0]), null);
             }
         }
     }

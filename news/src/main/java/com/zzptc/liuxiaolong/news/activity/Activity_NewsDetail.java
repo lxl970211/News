@@ -1,12 +1,10 @@
 package com.zzptc.liuxiaolong.news.activity;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,7 +20,6 @@ import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.model.NewsData;
-import com.zzptc.liuxiaolong.news.service.MyService;
 import com.zzptc.liuxiaolong.news.view.BaseActivity;
 
 import org.jsoup.Jsoup;
@@ -105,8 +102,6 @@ public class Activity_NewsDetail extends BaseActivity implements PushData.OnPush
 
 
     public void initdata(){
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         //返回值
         setResult(StaticProperty.RETURN_NEWSLIST);
 
@@ -178,8 +173,10 @@ public class Activity_NewsDetail extends BaseActivity implements PushData.OnPush
                     if (UserInfoAuthentication.tokenExists(this)) {
                         System.out.println("true");
                         if (!isLike) {
+                            Toast.makeText(this, "已收藏", Toast.LENGTH_SHORT).show();
                             pushData.pushCollectNews(newsData, "collectNews");
                         }else{
+                            Toast.makeText(this, "已取消收藏", Toast.LENGTH_SHORT).show();
                             pushData.pushCollectNews(newsData, "deleteCollect");
                         }
 
@@ -222,5 +219,10 @@ public class Activity_NewsDetail extends BaseActivity implements PushData.OnPush
                 isLike = false;
                 break;
         }
+    }
+
+    @Override
+    public void OnGetUserCollectNewsListListener(String json) {
+
     }
 }

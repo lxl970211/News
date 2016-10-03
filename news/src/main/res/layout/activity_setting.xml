@@ -14,7 +14,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@mipmap/back"
                 app:titleTextColor="@android:color/white"
-                app:titleTextAppearance="@style/toolbarStyle"
+                app:titleTextAppearance="@style/TitleSize"
                 android:background="@android:color/holo_blue_light"
                 app:title="@string/setting"
                 >
