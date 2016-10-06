@@ -35,6 +35,7 @@ import com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView;
 import com.zzptc.liuxiaolong.news.view.LoadFinshCallBack;
 import com.zzptc.liuxiaolong.news.view.MyGestureDetector;
 import com.zzptc.liuxiaolong.news.view.OnLongClickListener;
+import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -46,7 +47,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 @ContentView(R.layout.fragment__my_collect_news)
-public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushInfoListener, CollectNewsAdapter.OnClickerListener, OnLongClickListener{
+public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushInfoListener,OnRequestResultListener, CollectNewsAdapter.OnClickerListener, OnLongClickListener{
     private CollectNewsAdapter adapter;
     @ViewInject(R.id.rv_my_collect)
     private AutoLoadRecyclerView autoLoadRecyclerView;
@@ -92,6 +93,7 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
                 pushData = new PushData(getContext());
                 pushData.pushCollectNews(null, "getCollectNewsList");
                 pushData.setOnPushInfoListener(this);
+                pushData.setOnRequestResultListener(this);
                 registerForContextMenu(autoLoadRecyclerView);
             }else {
                 startActivity(new Intent(getContext(), Activity_Login.class));
@@ -106,15 +108,6 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
 
 
 
-    }
-
-    @Override
-    public void OnPushCollectNewsListener(int status) {
-        switch (status){
-            case 0:
-                adapter.removeItem(Itemposition);
-                break;
-        }
     }
 
     @Override
@@ -167,5 +160,14 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
                 .create();
                 builder.show();
 
+    }
+
+    @Override
+    public void OnGetRequestResultStatusListener(int status) {
+        switch (status){
+            case 0:
+                adapter.removeItem(Itemposition);
+                break;
+        }
     }
 }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
+    android:background="@color/white"
     android:clipToPadding="false"
     tools:context="com.zzptc.liuxiaolong.news.activity.Activity_NewsDetail">
     <WebView
@@ -13,78 +14,80 @@
         android:layout_width="match_parent"
         android:layout_height="519dp"></WebView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="2dp"
-        android:background="@android:color/white">
-
-        <RelativeLayout
-            android:id="@+id/writeReview"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/writereview"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:id="@+id/textView2" />
-            <ImageView
-                android:layout_toLeftOf="@id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/btn_wcomment_night"
-                android:layout_centerVertical="true"/>
-
-
-        </RelativeLayout>
-
-
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@mipmap/comment_btn"
-                android:layout_gravity="center"
-                android:padding="3dp"/>
-            <TextView
-                android:id="@+id/tv_sumReview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="10sp"
-                android:paddingBottom="2dp"
-                />
-        </FrameLayout>
-
-
-        <ImageView
-            android:id="@+id/iv_share"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@mipmap/btn_share_night"
-            android:padding="5dp"/>
-
-
-        <ImageView
-            android:id="@+id/iv_like"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@mipmap/ash"
-            android:layout_gravity="center"
-            />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:padding="2dp"
+            android:layout_below="@+id/webview">
+
+            <RelativeLayout
+                android:id="@+id/rl_writeReview"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
 
 
-</LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/writereview"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/textView2" />
+                <ImageView
+                    android:layout_toLeftOf="@id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/btn_wcomment_night"
+                    android:layout_centerVertical="true"/>
+
+
+            </RelativeLayout>
+
+
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/comment_btn"
+                    android:layout_gravity="center"
+                    android:padding="3dp"/>
+                <TextView
+                    android:id="@+id/tv_sumReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="10sp"
+                    android:paddingBottom="2dp"
+                    />
+            </FrameLayout>
+
+
+            <ImageView
+                android:id="@+id/iv_share"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:src="@mipmap/btn_share_night"
+                android:padding="5dp"/>
+
+
+            <ImageView
+                android:id="@+id/iv_like"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@mipmap/ash"
+                android:layout_gravity="center"
+                />
+        </LinearLayout>
+
+
+
+</RelativeLayout>

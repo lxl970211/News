@@ -19,8 +19,11 @@ import com.zzptc.liuxiaolong.news.Utils.PushData;
 import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
+import com.zzptc.liuxiaolong.news.fragment.FragmentDialog_WriteComment;
 import com.zzptc.liuxiaolong.news.model.NewsData;
 import com.zzptc.liuxiaolong.news.view.BaseActivity;
+import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
+
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -36,18 +39,19 @@ import java.io.IOException;
 
 
 @ContentView(R.layout.activity_news_detail)
-public class Activity_NewsDetail extends BaseActivity implements PushData.OnPushInfoListener{
+public class Activity_NewsDetail extends BaseActivity implements OnRequestResultListener{
 
     @ViewInject(R.id.webview)
     private WebView webView;
-    @ViewInject(R.id.writeReview)
-    private RelativeLayout writeReview;
+    @ViewInject(R.id.rl_writeReview)
+    private RelativeLayout rl_writeReview;
     @ViewInject(R.id.iv_like)
     private ImageView iv_like;
     @ViewInject(R.id.iv_share)
     private ImageView iv_share;
     @ViewInject(R.id.tv_sumReview)
     private TextView tv_sumReview;
+
 
     private boolean isLike = false;
     private GestureDetector gestureDetector;
@@ -98,6 +102,7 @@ public class Activity_NewsDetail extends BaseActivity implements PushData.OnPush
         });
 
 
+
     }
 
 
@@ -131,8 +136,6 @@ public class Activity_NewsDetail extends BaseActivity implements PushData.OnPush
                         document.select("div.pswp").remove();
 
 
-//                        Element element = document.getElementById("DFTOUTIAOCS");
-//                        element.remove();
 
                         Element e1 = document.getElementById("news_check");
                         e1.remove();
@@ -154,24 +157,26 @@ public class Activity_NewsDetail extends BaseActivity implements PushData.OnPush
 
             if (NetWorkStatus.getNetWorkType(this) != 0 && UserInfoAuthentication.tokenExists(this)){
                 pushData.pushCollectNews(newsData, "checkIsCollect");
-                pushData.setOnPushInfoListener(this);
+                pushData.setOnRequestResultListener(this);
             }
 
 
     }
-
-    @Event(value = {R.id.writeReview, R.id.iv_like, R.id.iv_share})
+    /*
+    点击监听
+     */
+    @Event(value = {R.id.rl_writeReview, R.id.iv_like, R.id.iv_share})
     private void getEvent(View v){
         switch (v.getId()){
-            case R.id.writeReview: //写评论
+            case R.id.rl_writeReview: //写评论
+                FragmentDialog_WriteComment dialog_writeComment = FragmentDialog_WriteComment.newInstance(newsData.getUrl());
+                dialog_writeComment.show(getSupportFragmentManager(), null);
                 break;
 
             case R.id.iv_like: //收藏新闻
                 //网络已连接并且用户已登录
                 if (NetWorkStatus.getNetWorkType(this) != 0) {
-                    System.out.println("network");
                     if (UserInfoAuthentication.tokenExists(this)) {
-                        System.out.println("true");
                         if (!isLike) {
                             Toast.makeText(this, "已收藏", Toast.LENGTH_SHORT).show();
                             pushData.pushCollectNews(newsData, "collectNews");
@@ -198,6 +203,8 @@ public class Activity_NewsDetail extends BaseActivity implements PushData.OnPush
 
     }
 
+
+
     //返回按钮监听
     @Override
     public void onBackPressed() {
@@ -205,9 +212,11 @@ public class Activity_NewsDetail extends BaseActivity implements PushData.OnPush
         MyAnimator.closeActivityAnim(Activity_NewsDetail.this);
     }
 
+
+
+
     @Override
-    public void OnPushCollectNewsListener(int status) {
-        System.out.println(status);
+    public void OnGetRequestResultStatusListener(int status) {
         switch (status){
             case 1:
                 iv_like.setColorFilter(getResources().getColor(android.R.color.holo_red_dark));
@@ -219,10 +228,5 @@ public class Activity_NewsDetail extends BaseActivity implements PushData.OnPush
                 isLike = false;
                 break;
         }
-    }
-
-    @Override
-    public void OnGetUserCollectNewsListListener(String json) {
-
     }
 }

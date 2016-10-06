@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+
 /**
  * Created by lxl97 on 2016/8/9.
  */

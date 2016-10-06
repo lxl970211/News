@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.zzptc.liuxiaolong.news.fragment.FragmentDialog_WriteComment">
+
+    <LinearLayout
+        android:padding="20dp"
+        android:layout_width="300dp"
+        android:layout_height="266dp"
+        android:id="@+id/editText"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical|center"
+        android:layout_weight="0.11">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:hint="@string/writereview"
+            android:gravity="top"
+            android:id="@+id/et_write_comment" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:text="@string/send"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:id="@+id/tv_sendComment"
+                android:textColor="@color/blue"/>
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:text="@string/cancel"
+                android:gravity="center"
+                android:layout_toLeftOf="@id/tv_sendComment"
+                android:textColor="@color/blue"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

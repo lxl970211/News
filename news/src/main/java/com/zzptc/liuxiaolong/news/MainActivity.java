@@ -3,9 +3,7 @@ package com.zzptc.liuxiaolong.news;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -18,20 +16,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.zhy.autolayout.AutoLayoutActivity;
 import com.zzptc.liuxiaolong.news.Utils.MyAsyncTask;
-import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
 import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.activity.Activity_Login;
 import com.zzptc.liuxiaolong.news.activity.Activity_SearchNews;
@@ -41,22 +34,15 @@ import com.zzptc.liuxiaolong.news.adapter.MyFragmentPagerAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
-import com.zzptc.liuxiaolong.news.datapars.GetNews;
 import com.zzptc.liuxiaolong.news.fragment.MyFragment;
-import com.zzptc.liuxiaolong.news.javabean.User;
 import com.zzptc.liuxiaolong.news.service.MyService;
 
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends AutoLayoutActivity implements View.OnClickListener, MyAsyncTask.OnGetUserInfoListener{
@@ -95,7 +81,7 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         x.view().inject(this);
-
+        System.out.println(UserInfoAuthentication.getTokeninfo(x.app(), "token"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
@@ -106,7 +92,6 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
                         MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
                 shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE);
             }
-
 
         init();
 

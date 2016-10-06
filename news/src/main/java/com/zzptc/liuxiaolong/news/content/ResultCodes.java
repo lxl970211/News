@@ -15,8 +15,12 @@ public class ResultCodes {
     public static final int REGISTER_AUCCESS = 100;
     //注册失败
     public static final int REGISTER_FAILED = 101;
-
+    //登录失败
     public static final int LOGIN_ERROR = 102;
-
+    //登录成功
     public static final int LOGIN_AUCCESS = 103;
+    //评论成功
+    public static final int COMMENT_AUCCESS = 104;
+    //评论失败
+    public static final int COMMENT_ERROR = 105;
 }

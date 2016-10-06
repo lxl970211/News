@@ -5,6 +5,8 @@ import android.os.Build;
 
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,5 +61,13 @@ public class MyUtils {
      */
     public static String myToken(String userpassword){
         return Build.MODEL+new MyUtils().getMac()+userpassword;
+    }
+
+    /*
+    获取当前时间 String类型
+     */
+    public static String getNowTime(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date());
     }
 }

@@ -29,6 +29,7 @@ import org.xutils.x;
 
 import java.util.List;
 
+
 @ContentView(R.layout.activity_search_news)
 public class Activity_SearchNews extends BaseActivity {
     @ViewInject(R.id.searchNews_toolbar)
@@ -46,6 +47,9 @@ public class Activity_SearchNews extends BaseActivity {
 
     private ImageLoader imageLoader;
     private LoadFinshCallBack mloadfinshcallBack;
+
+    public Activity_SearchNews() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
