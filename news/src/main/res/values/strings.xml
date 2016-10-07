@@ -34,4 +34,9 @@
     <string name="writereview">写评论</string>
     <string name="send">发送</string>
     <string name="cancel">取消</string>
+    <string name="new_comment">最新</string>
+    <string name="earliest">最早</string>
+    <string name="buttress">支持</string>
+    <string name="contra">反对</string>
+    <string name="reply">回复</string>
 </resources>

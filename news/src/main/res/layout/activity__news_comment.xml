@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity__news_comment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.zzptc.liuxiaolong.news.activity.Activity_NewsComment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:id="@+id/btn_new_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_comment"
+            android:background="@color/blue"
+            android:textColor="@color/white"
+            />
+
+        <Button
+            android:id="@+id/btn_earliest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/earliest"
+            android:background="@color/blue"
+            android:textColor="@color/white"
+            />
+
+    </LinearLayout>
+
+
+    <com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView
+        android:id="@+id/recy_comment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView>
+</LinearLayout>

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -13,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
 import com.zzptc.liuxiaolong.news.Utils.PushData;
@@ -20,6 +20,7 @@ import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.fragment.FragmentDialog_WriteComment;
+import com.zzptc.liuxiaolong.news.javabean.CommentBean;
 import com.zzptc.liuxiaolong.news.model.NewsData;
 import com.zzptc.liuxiaolong.news.view.BaseActivity;
 import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
@@ -37,9 +38,8 @@ import org.xutils.x;
 import java.io.IOException;
 
 
-
 @ContentView(R.layout.activity_news_detail)
-public class Activity_NewsDetail extends BaseActivity implements OnRequestResultListener{
+public class Activity_NewsDetail extends BaseActivity implements OnRequestResultListener,PushData.OnPushInfoListener{
 
     @ViewInject(R.id.webview)
     private WebView webView;
@@ -58,6 +58,8 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
 
     private NewsData newsData;
     PushData pushData;
+
+    private CommentBean commentBean;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +112,6 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
         //返回值
         setResult(StaticProperty.RETURN_NEWSLIST);
 
-        webView.setWebChromeClient(new WebChromeClient());
         webView.setWebViewClient(new WebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDefaultTextEncodingName("utf-8");
@@ -131,7 +132,9 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
                 public void run() {
                     Document document = null;
                     try {
-                        //删除新闻页面中不必要的模块
+                        /*
+                        删除新闻页面中不必要的模块
+                         */
                         document = Jsoup.connect(newsData.getUrl()).get();
                         document.select("div.pswp").remove();
 
@@ -155,9 +158,17 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
                 }
           }
 
+
+
+            //检查是否已收藏
             if (NetWorkStatus.getNetWorkType(this) != 0 && UserInfoAuthentication.tokenExists(this)){
                 pushData.pushCollectNews(newsData, "checkIsCollect");
                 pushData.setOnRequestResultListener(this);
+
+            }
+            if (NetWorkStatus.getNetWorkType(this) != 0){
+                pushData.getCommentList(newsData.getUrl());
+                pushData.setOnPushInfoListener(this);
             }
 
 
@@ -165,7 +176,7 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
     /*
     点击监听
      */
-    @Event(value = {R.id.rl_writeReview, R.id.iv_like, R.id.iv_share})
+    @Event(value = {R.id.rl_writeReview, R.id.iv_like, R.id.iv_share, R.id.tv_sumReview})
     private void getEvent(View v){
         switch (v.getId()){
             case R.id.rl_writeReview: //写评论
@@ -198,6 +209,15 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
             case R.id.iv_share: //分享新闻
 
                 break;
+
+            case R.id.tv_sumReview:
+                Intent intent = new Intent(this, Activity_NewsComment.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("commentBean", commentBean);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                MyAnimator.openActivityAnim(this);
+                break;
         }
 
 
@@ -227,6 +247,17 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
                 iv_like.setColorFilter(getResources().getColor(android.R.color.darker_gray));
                 isLike = false;
                 break;
+        }
+    }
+
+    @Override
+    public void OnGetUserCollectNewsListListener(String json) {
+        if (!"0".equals(json)){
+            Gson gson = new Gson();
+            commentBean = gson.fromJson(json, CommentBean.class);
+            tv_sumReview.setText(commentBean.getList().size()+"");
+        }else{
+            tv_sumReview.setText(0);
         }
     }
 }

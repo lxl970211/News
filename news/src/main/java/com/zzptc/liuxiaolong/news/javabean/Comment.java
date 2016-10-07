@@ -1,15 +1,18 @@
-package com.zzptc.liuxiaolong.news.model;
+package com.zzptc.liuxiaolong.news.javabean;
+
+import java.io.Serializable;
 
 /**
  * Created by lxl97 on 2016/10/6.
  */
 
-public class Comment {
+public class Comment implements Serializable {
     private String token;
     private String name;
     private String commentTime;
     private String content;
     private int zan;
+    private int contra;
     private String newsId;//以新闻url为id
 
     public String getToken() {
@@ -60,5 +63,11 @@ public class Comment {
         return newsId;
     }
 
+    public void setContra(int contra) {
+        this.contra = contra;
+    }
 
+    public int getContra() {
+        return contra;
+    }
 }

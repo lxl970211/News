@@ -2,16 +2,12 @@ package com.zzptc.liuxiaolong.news.Utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
-import com.zzptc.liuxiaolong.news.datapars.GetNews;
 import com.zzptc.liuxiaolong.news.javabean.ResultData;
-import com.zzptc.liuxiaolong.news.model.Comment;
+import com.zzptc.liuxiaolong.news.javabean.Comment;
 import com.zzptc.liuxiaolong.news.model.NewsData;
-import com.zzptc.liuxiaolong.news.model.Result;
 import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
 
 import org.xutils.common.Callback;
@@ -19,10 +15,6 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  *
@@ -153,11 +145,11 @@ public class PushData {
         protected Void doInBackground(Comment... params) {
             RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"CommentServlet");
             if (UserInfoAuthentication.tokenExists(context)){
-                System.out.println(UserInfoAuthentication.getTokeninfo(context, "token"));
                 rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
             }else{
                 rp.addParameter("name", "匿名");
             }
+            rp.addParameter("type", "sendComment");
             rp.addParameter("commentTime", MyUtils.getNowTime());
             rp.addParameter("content", params[0].getContent());
             rp.addParameter("newsId", params[0].getNewsId());
@@ -196,5 +188,51 @@ public class PushData {
             }
         }
     }
+
+    public void getCommentList(String url){
+        new GetCommentList().execute(url);
+    }
+    class GetCommentList extends AsyncTask<String, String, Void>{
+
+        @Override
+        protected Void doInBackground(String... params) {
+            RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"CommentServlet");
+            rp.addParameter("type", "commentList");
+            rp.addParameter("newsId", params[0]);
+            x.http().post(rp, new Callback.CommonCallback<String>() {
+                @Override
+                public void onCancelled(CancelledException cex) {
+
+                }
+                @Override
+                public void onSuccess(String result) {
+                    publishProgress(result);
+                }
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+
+                }
+
+                @Override
+                public void onFinished() {
+
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+
+            if (onPushInfoListener != null){
+                onPushInfoListener.OnGetUserCollectNewsListListener(values[0]);
+            }
+
+        }
+    }
+
+
 
 }

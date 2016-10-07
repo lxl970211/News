@@ -24,6 +24,7 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="StcBhnGjj8VWGqBCnFE0zxArtUfYOEDl" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,13 +34,14 @@
         </activity>
 
         <service android:name=".service.MyService" />
+
         <activity
             android:name=".activity.Activity_Setting"
             android:theme="@style/ortherActivityStyle" />
         <activity
             android:name=".activity.Activity_NewsDetail"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/ortherActivityStyle" />
+            android:theme="@style/ortherActivityStyle"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.Activity_SearchNews"
             android:theme="@style/ortherActivityStyle" />
@@ -50,9 +52,7 @@
             android:name=".activity.Activity_Feedback"
             android:theme="@style/ortherActivityStyle" />
         <activity android:name=".activity.MyActivity" />
-
-
-
+        <activity android:name=".activity.Activity_NewsComment" />
     </application>
 
 </manifest>

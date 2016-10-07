@@ -1,7 +1,6 @@
 package com.zzptc.liuxiaolong.news.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -15,10 +14,8 @@ import android.widget.Toast;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
 import com.zzptc.liuxiaolong.news.Utils.PushData;
-import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
-import com.zzptc.liuxiaolong.news.activity.Activity_Login;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
-import com.zzptc.liuxiaolong.news.model.Comment;
+import com.zzptc.liuxiaolong.news.javabean.Comment;
 import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
 
 import org.xutils.view.annotation.ContentView;
@@ -97,11 +94,11 @@ public class FragmentDialog_WriteComment extends DialogFragment implements OnReq
     public void OnGetRequestResultStatusListener(int status) {
         switch (status){
             case ResultCodes.COMMENT_AUCCESS:
-                Toast.makeText(getContext(), "评论成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(x.app(), "评论成功", Toast.LENGTH_SHORT).show();
                 break;
 
             case ResultCodes.COMMENT_ERROR:
-                Toast.makeText(getContext(), "评论失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(x.app(), "评论失败", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
