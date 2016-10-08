@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by lxl97 on 2016/10/6.
  */
 
-public class Comment implements Serializable {
+public class Comment implements Serializable{
     private String token;
     private String name;
     private String commentTime;
@@ -14,6 +14,7 @@ public class Comment implements Serializable {
     private int zan;
     private int contra;
     private String newsId;//以新闻url为id
+    private Integer lou;
 
     public String getToken() {
         return token;
@@ -70,4 +71,14 @@ public class Comment implements Serializable {
     public int getContra() {
         return contra;
     }
+
+    public void setLou(Integer lou) {
+        this.lou = lou;
+    }
+
+    public Integer getLou() {
+        return lou;
+    }
+
+
 }

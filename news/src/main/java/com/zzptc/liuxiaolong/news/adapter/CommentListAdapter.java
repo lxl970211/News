@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zzptc.liuxiaolong.news.R;
+import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.javabean.Comment;
 
 import org.xutils.view.annotation.ViewInject;
@@ -40,14 +41,16 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Comment comment = list.get(position);
+        System.out.println(comment.getLou());
         if (comment != null){
 
             holder.name.setText(comment.getName());
-            holder.commentTime.setText(comment.getCommentTime());
+            long time = MyUtils.nowTimeLong() - MyUtils.timeStringToLong(comment.getCommentTime());
+            holder.commentTime.setText(MyUtils.getCommentDistanceCurrentTime(time)+"前");
             holder.content.setText(comment.getContent());
             holder.zan.setText("支持("+comment.getZan()+")");
             holder.contra.setText("反对("+comment.getContra()+")");
-
+            holder.lou.setText(comment.getLou()+"楼");
         }
     }
 
@@ -63,6 +66,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         TextView zan;
         TextView contra;
         TextView content;
+        TextView lou;
         public MyViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.tv_comment_name);
@@ -70,7 +74,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             contra = (TextView) itemView.findViewById(R.id.tv_contra);
             content = (TextView) itemView.findViewById(R.id.tv_comment_content);
             zan = (TextView) itemView.findViewById(R.id.tv_buttress);
-
+            lou = (TextView) itemView.findViewById(R.id.tv_lou);
         }
     }
 }

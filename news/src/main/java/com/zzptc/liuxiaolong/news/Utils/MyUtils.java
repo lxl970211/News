@@ -5,7 +5,9 @@ import android.os.Build;
 
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,5 +71,42 @@ public class MyUtils {
     public static String getNowTime(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(new Date());
+    }
+
+    //评论时间String 转为long类型
+
+    public static long timeStringToLong(String time){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        try {
+            cal.setTime(sdf.parse(time));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        return cal.getTimeInMillis();
+    }
+
+    /*
+    当前时间long类型
+     */
+    public static long nowTimeLong(){
+        Calendar cal = Calendar.getInstance();
+        return cal.getTimeInMillis();
+
+    }
+
+
+    public static String getCommentDistanceCurrentTime(long time){
+        if (time < (60*1000)){
+            return time/1000+"秒";
+        }else if (time < (3600*1000)){
+            return time/ (60 * 1000)+"分钟";
+        }else if(time < (3600*24*1000) ){
+            return time / (3600*1000)+"小时";
+        }else{
+            return time/(3600*24*1000)+"天";
+        }
     }
 }

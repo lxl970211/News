@@ -166,22 +166,32 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
                 pushData.setOnRequestResultListener(this);
 
             }
-            if (NetWorkStatus.getNetWorkType(this) != 0){
-                pushData.getCommentList(newsData.getUrl());
-                pushData.setOnPushInfoListener(this);
-            }
+
 
 
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //获取评论列表
+        if (NetWorkStatus.getNetWorkType(this) != 0){
+            pushData.getCommentList(newsData.getUrl());
+            pushData.setOnPushInfoListener(this);
+        }
+    }
+
     /*
-    点击监听
-     */
+        点击监听
+         */
     @Event(value = {R.id.rl_writeReview, R.id.iv_like, R.id.iv_share, R.id.tv_sumReview})
     private void getEvent(View v){
         switch (v.getId()){
             case R.id.rl_writeReview: //写评论
                 FragmentDialog_WriteComment dialog_writeComment = FragmentDialog_WriteComment.newInstance(newsData.getUrl());
                 dialog_writeComment.show(getSupportFragmentManager(), null);
+                dialog_writeComment.setOnRequestResultListener(this);
                 break;
 
             case R.id.iv_like: //收藏新闻
@@ -212,9 +222,8 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
 
             case R.id.tv_sumReview:
                 Intent intent = new Intent(this, Activity_NewsComment.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("commentBean", commentBean);
-                intent.putExtras(bundle);
+                intent.putExtra("url", newsData.getUrl());
+
                 startActivity(intent);
                 MyAnimator.openActivityAnim(this);
                 break;
@@ -247,17 +256,17 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
                 iv_like.setColorFilter(getResources().getColor(android.R.color.darker_gray));
                 isLike = false;
                 break;
+            case 3:
+                pushData.getCommentList(newsData.getUrl());
+                break;
         }
     }
 
     @Override
     public void OnGetUserCollectNewsListListener(String json) {
-        if (!"0".equals(json)){
             Gson gson = new Gson();
             commentBean = gson.fromJson(json, CommentBean.class);
-            tv_sumReview.setText(commentBean.getList().size()+"");
-        }else{
-            tv_sumReview.setText(0);
-        }
+            tv_sumReview.setText(commentBean.getCommentCount()+"");
+
     }
 }

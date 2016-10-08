@@ -6,6 +6,11 @@ import android.util.Log;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.Assert.*;
 
 /**
@@ -19,8 +24,11 @@ public class MyUtilsTest {
     }
 
     @Test
-    public void tokenTest(){
-
+    public void timeTest(){
+        String a = "2016-10-08 16:07:20";
+        long time =  MyUtils.nowTimeLong() - MyUtils.timeStringToLong(a);
+        String i = MyUtils.getCommentDistanceCurrentTime(time);
+        System.out.println(i);
     }
 
 }

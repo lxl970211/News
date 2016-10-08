@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/new_comment"
-            android:background="@color/blue"
+            android:background="@drawable/commentbtn_selector_shape"
             android:textColor="@color/white"
             />
 
@@ -27,17 +27,57 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/earliest"
-            android:background="@color/blue"
-            android:textColor="@color/white"
+            android:background="@drawable/commentbtn_unselector_shape"
+            android:textColor="@color/blue"
             />
 
     </LinearLayout>
 
-
-    <com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView
-        android:id="@+id/recy_comment"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="475dp">
 
-    </com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView>
+        <com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView
+            android:id="@+id/recy_comment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:layout_marginTop="10dp"
+            >
+
+        </com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView>
+
+        <TextView
+            android:id="@+id/tv_noComment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="暂时无人吐槽"
+            android:visibility="gone"
+            />
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"/>
+        <TextView
+            android:id="@+id/tv_writeComment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/btn_wcomment_night"
+            android:paddingLeft="10dp"
+            android:text="@string/writereview"
+            android:gravity="center_vertical"/>
+
+
+
+    </LinearLayout>
+
 </LinearLayout>

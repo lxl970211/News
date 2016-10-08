@@ -8,7 +8,7 @@ import java.util.List;
  */
 
 public class CommentBean implements Serializable {
-
+    private int commentCount;
     private List<Comment> list;
 
     public List<Comment> getList() {
@@ -17,5 +17,13 @@ public class CommentBean implements Serializable {
 
     public void setList(List<Comment> list) {
         this.list = list;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
     }
 }

@@ -1,6 +1,7 @@
 package com.zzptc.liuxiaolong.news.fragment;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -39,6 +40,11 @@ public class FragmentDialog_WriteComment extends DialogFragment implements OnReq
     private TextView mSendComment;
     private PushData pushData;
 
+    //评论完成后监听
+    private OnRequestResultListener onRequestResultListener;
+    public void setOnRequestResultListener(OnRequestResultListener listener){
+        onRequestResultListener = listener;
+    }
     public static FragmentDialog_WriteComment newInstance(String url){
         FragmentDialog_WriteComment fragmentDialog_writeComment = new FragmentDialog_WriteComment();
         Bundle bundle = new Bundle();
@@ -95,11 +101,16 @@ public class FragmentDialog_WriteComment extends DialogFragment implements OnReq
         switch (status){
             case ResultCodes.COMMENT_AUCCESS:
                 Toast.makeText(x.app(), "评论成功", Toast.LENGTH_SHORT).show();
+                if (onRequestResultListener != null){
+                    onRequestResultListener.OnGetRequestResultStatusListener(3);
+                }
                 break;
 
             case ResultCodes.COMMENT_ERROR:
                 Toast.makeText(x.app(), "评论失败", Toast.LENGTH_SHORT).show();
+
                 break;
         }
     }
+
 }
