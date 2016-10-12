@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.PushData;
+import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.adapter.CommentListAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.fragment.FragmentDialog_WriteComment;
@@ -26,14 +27,11 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 @ContentView(R.layout.activity__news_comment)
-public class Activity_NewsComment extends AppCompatActivity implements LoadFinshCallBack, OnRequestResultListener, PushData.OnPushInfoListener{
+public class Activity_NewsComment extends AppCompatActivity implements LoadFinshCallBack, OnRequestResultListener, PushData.OnPushInfoListener, CommentListAdapter.OnClickListener{
     @ViewInject(R.id.recy_comment)
     private AutoLoadRecyclerView recyclerView;
     private CommentListAdapter adapter;
@@ -65,8 +63,9 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
             Intent intent = getIntent();
             url = intent.getStringExtra("url");
             pushData = new PushData(this);
-            pushData.getCommentList(url);
+            pushData.getCommentList(url, "commentList");
             pushData.setOnPushInfoListener(this);
+
 
 
 
@@ -82,27 +81,32 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
                 break;
 
             case R.id.btn_earliest:
-                //升序
-                Collections.sort(commentBean.getList(), new Comparator<Comment>() {
-                    @Override
-                    public int compare(Comment lhs, Comment rhs) {
+                if (commentBean.getList().size() > 0) {
+                    //升序
+                    Collections.sort(commentBean.getList(), new Comparator<Comment>() {
+                        @Override
+                        public int compare(Comment lhs, Comment rhs) {
 
-                        return lhs.getLou().compareTo(rhs.getLou());
-                    }
-                });
-                adapter.notifyDataSetChanged();
-                select(1);
+                            return lhs.getLou().compareTo(rhs.getLou());
+                        }
+                    });
+                    adapter.notifyDataSetChanged();
+                    select(1);
+
+                }
                 break;
             case R.id.btn_new_comment:
-                //降序
-                Collections.sort(commentBean.getList(), new Comparator<Comment>() {
-                    @Override
-                    public int compare(Comment lhs, Comment rhs) {
-                        return rhs.getLou().compareTo(lhs.getLou());
-                    }
-                });
-                adapter.notifyDataSetChanged();
-                select(0);
+                if (commentBean.getList().size() > 0) {
+                    //降序
+                    Collections.sort(commentBean.getList(), new Comparator<Comment>() {
+                        @Override
+                        public int compare(Comment lhs, Comment rhs) {
+                            return rhs.getLou().compareTo(lhs.getLou());
+                        }
+                    });
+                    adapter.notifyDataSetChanged();
+                    select(0);
+                }
                 break;
 
         }
@@ -120,18 +124,16 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
     public void OnGetRequestResultStatusListener(int status) {
         switch (status){
             case 3:
-                pushData.getCommentList(url);
+                pushData.getCommentList(url, "commentList");
                 break;
         }
-
-
 
     }
 
 
     @Override
     public void OnGetUserCollectNewsListListener(String json) {
-            Gson gson = new Gson();
+            final Gson gson = new Gson();
             commentBean = gson.fromJson(json, CommentBean.class);
             if (commentBean.getCommentCount() == 0){
                 tv_noComment.setVisibility(View.VISIBLE);
@@ -143,6 +145,7 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(adapter);
+                adapter.setOnClickListener(this);
 
             }
     }
@@ -165,6 +168,39 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
                 btn_earliest.setTextColor(getResources().getColor(android.R.color.white));
                 break;
 
+        }
+
+    }
+    //支持点击事件
+    @Override
+    public void OnClickListener(View v, final int lou, final int position) {
+        final TextView like = (TextView) v.findViewById(R.id.tv_buttress);
+        //登录后才可点赞
+        if (UserInfoAuthentication.tokenExists(this)) {
+
+            final Comment comment = new Comment();
+            comment.setType("like");
+            comment.setLou(lou);
+            comment.setNewsId(url);
+            pushData.updateZan(comment);
+            pushData.setOnRequestResultListener(new OnRequestResultListener() {
+                @Override
+                public void OnGetRequestResultStatusListener(int status) {
+                    System.out.println(status);
+                    switch (status) {
+                        case 1:
+                            adapter.updateItemData(position);
+                            break;
+                        case 2:
+                            adapter.cancelZan(position);
+                            break;
+
+                    }
+                }
+            });
+        }else{
+                startActivity(new Intent(this, Activity_Login.class));
+                MyAnimator.openActivityAnim(this);
         }
 
     }

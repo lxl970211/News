@@ -12,8 +12,6 @@ import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.javabean.Comment;
 
-import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
 import java.util.List;
 
@@ -25,9 +23,22 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     private Context context;
     private List<Comment> list;
 
+    private int type =0;
+    public interface OnClickListener{
+        void OnClickListener(View v, int lou, int position);
+
+    }
+
+    private OnClickListener onClickListener;
+    public void setOnClickListener(OnClickListener listener){
+        onClickListener = listener;
+    }
+
     public CommentListAdapter(List<Comment> list, Context context){
         this.list = list;
         this.context = context;
+
+
     }
 
 
@@ -39,18 +50,30 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        Comment comment = list.get(position);
-        System.out.println(comment.getLou());
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        final Comment comment = list.get(position);
         if (comment != null){
-
             holder.name.setText(comment.getName());
             long time = MyUtils.nowTimeLong() - MyUtils.timeStringToLong(comment.getCommentTime());
             holder.commentTime.setText(MyUtils.getCommentDistanceCurrentTime(time)+"前");
             holder.content.setText(comment.getContent());
-            holder.zan.setText("支持("+comment.getZan()+")");
-            holder.contra.setText("反对("+comment.getContra()+")");
+
+
+            if (type == 0) {
+                holder.like.setText("支持(" + list.get(position).getLike() + ")");
+            }else if (type == 1){
+                holder.like.setText("取消("+ list.get(position).getLike()+")");
+            }
             holder.lou.setText(comment.getLou()+"楼");
+            holder.like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickListener != null){
+                        onClickListener.OnClickListener(holder.like, comment.getLou(), position);
+                    }
+                }
+            });
+
         }
     }
 
@@ -63,18 +86,34 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         ImageView header;
         TextView name;
         TextView commentTime;
-        TextView zan;
-        TextView contra;
+        TextView like;
         TextView content;
         TextView lou;
         public MyViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.tv_comment_name);
             commentTime = (TextView) itemView.findViewById(R.id.tv_comment_time);
-            contra = (TextView) itemView.findViewById(R.id.tv_contra);
             content = (TextView) itemView.findViewById(R.id.tv_comment_content);
-            zan = (TextView) itemView.findViewById(R.id.tv_buttress);
+            like = (TextView) itemView.findViewById(R.id.tv_buttress);
             lou = (TextView) itemView.findViewById(R.id.tv_lou);
         }
     }
+
+
+    public void updateItemData(int position){
+        int count = list.get(position).getLike();
+        list.get(position).setLike((count +1));
+        type = 1;
+        notifyItemChanged(position);
+
+    }
+
+    public void cancelZan(int position){
+        int count = list.get(position).getLike();
+        list.get(position).setLike((count - 1));
+
+        type = 0;
+        notifyItemChanged(position);
+    }
+
 }

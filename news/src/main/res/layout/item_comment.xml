@@ -84,17 +84,13 @@
             android:text="@string/reply"
             android:layout_alignParentRight="true"
             />
-        <TextView
-            style="@style/CommentfunctionTextViewStyle"
-            android:id="@+id/tv_contra"
-            android:text="@string/contra"
-            android:layout_toLeftOf="@id/tv_reply"
-            />
+
         <TextView
             style="@style/CommentfunctionTextViewStyle"
             android:id="@+id/tv_buttress"
             android:text="@string/buttress"
-            android:layout_toLeftOf="@id/tv_contra"
+            android:textColor="@color/google_color_green"
+            android:layout_toLeftOf="@id/tv_reply"
             />
 
 

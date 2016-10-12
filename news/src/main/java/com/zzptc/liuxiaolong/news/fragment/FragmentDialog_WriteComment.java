@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +58,7 @@ public class FragmentDialog_WriteComment extends DialogFragment implements OnReq
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View v = x.view().inject(this, inflater, container);
 
         return v;
@@ -113,4 +116,10 @@ public class FragmentDialog_WriteComment extends DialogFragment implements OnReq
         }
     }
 
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        super.onDismiss(dialog);
+    }
 }

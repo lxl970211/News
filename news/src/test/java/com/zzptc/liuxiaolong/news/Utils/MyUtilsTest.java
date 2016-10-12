@@ -5,6 +5,7 @@ import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.xutils.x;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,12 +24,5 @@ public class MyUtilsTest {
         myUtils = new MyUtils();
     }
 
-    @Test
-    public void timeTest(){
-        String a = "2016-10-08 16:07:20";
-        long time =  MyUtils.nowTimeLong() - MyUtils.timeStringToLong(a);
-        String i = MyUtils.getCommentDistanceCurrentTime(time);
-        System.out.println(i);
-    }
 
 }

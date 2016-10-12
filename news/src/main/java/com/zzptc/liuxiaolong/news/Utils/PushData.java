@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
+import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.javabean.ResultData;
 import com.zzptc.liuxiaolong.news.javabean.Comment;
@@ -189,16 +190,19 @@ public class PushData {
         }
     }
 
-    public void getCommentList(String url){
-        new GetCommentList().execute(url);
+    public void getCommentList(String newsId, String type){
+        new GetCommentList().execute(new String[]{newsId, type});
     }
+
     class GetCommentList extends AsyncTask<String, String, Void>{
 
         @Override
         protected Void doInBackground(String... params) {
             RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"CommentServlet");
-            rp.addParameter("type", "commentList");
-            rp.addParameter("newsId", params[0]);
+                rp.addParameter("type", params[1]);
+                rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
+                rp.addParameter("newsId", params[0]);
+
             x.http().post(rp, new Callback.CommonCallback<String>() {
                 @Override
                 public void onCancelled(CancelledException cex) {
@@ -228,6 +232,55 @@ public class PushData {
 
             if (onPushInfoListener != null){
                 onPushInfoListener.OnGetUserCollectNewsListListener(values[0]);
+            }
+
+        }
+    }
+
+    public void updateZan(Comment comment){
+        new Like().execute(comment);
+
+    }
+    class Like extends AsyncTask<Comment, Integer, Void>{
+
+        @Override
+        protected Void doInBackground(Comment... params) {
+            RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"CommentServlet");
+            rp.addParameter("type", params[0].getType());
+            rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
+            rp.addParameter("newsId", params[0].getNewsId());
+            rp.addParameter("lou", params[0].getLou());
+            x.http().post(rp, new Callback.CommonCallback<String>() {
+                @Override
+                public void onCancelled(CancelledException cex) {
+
+                }
+
+                @Override
+                public void onSuccess(String result) {
+                    ResultData res = gson.fromJson(result, ResultData.class);
+                    publishProgress(res.getStatus());
+                }
+
+                @Override
+                public void onFinished() {
+
+                }
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+
+                }
+            });
+            return null;
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            if (onRequestResultListener != null){
+                onRequestResultListener.OnGetRequestResultStatusListener(values[0]);
             }
 
         }

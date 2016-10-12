@@ -177,7 +177,7 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
         super.onResume();
         //获取评论列表
         if (NetWorkStatus.getNetWorkType(this) != 0){
-            pushData.getCommentList(newsData.getUrl());
+            pushData.getCommentList(newsData.getUrl(), "commentList");
             pushData.setOnPushInfoListener(this);
         }
     }
@@ -257,7 +257,7 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
                 isLike = false;
                 break;
             case 3:
-                pushData.getCommentList(newsData.getUrl());
+                pushData.getCommentList(newsData.getUrl(), "commentList");
                 break;
         }
     }
