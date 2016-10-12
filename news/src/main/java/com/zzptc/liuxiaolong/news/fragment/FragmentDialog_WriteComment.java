@@ -79,11 +79,14 @@ public class FragmentDialog_WriteComment extends DialogFragment implements OnReq
                 if (NetWorkStatus.getNetWorkType(getContext()) != 0) {
 
                         if (et_write_comment.getText().toString() != null && !et_write_comment.getText().toString().equals("")) {
+
                             Bundle bundle = getArguments();
 
                             String newsId = bundle.getString("url");
+
                             String title = bundle.getString("title");
                             String content = et_write_comment.getText().toString();
+
                             pushData = new PushData(getContext());
                             pushData.writeComment(content, newsId, title);
 

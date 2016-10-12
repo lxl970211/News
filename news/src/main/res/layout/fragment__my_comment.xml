@@ -2,12 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.zzptc.liuxiaolong.news.fragment.Fragment_MyComment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView
+        android:id="@+id/recy_mycomment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+    </com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView>
 
 </FrameLayout>

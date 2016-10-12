@@ -146,8 +146,15 @@ public class PushData {
         new GetRequestStatus().execute(rp);
     }
 
-
-
+    /**
+     * 用户评论列表
+     */
+    public void getMyCommentList(){
+        RequestParams rp = new RequestParams(StaticProperty.COMMENT_SERVLET);
+        rp.addParameter("type", "userCommentList");
+        rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
+        new GetRequestData().execute(rp);
+    }
     class GetRequestStatus extends AsyncTask<RequestParams, Integer, Void>{
 
         @Override
