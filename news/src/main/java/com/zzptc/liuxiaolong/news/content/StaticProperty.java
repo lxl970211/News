@@ -23,12 +23,13 @@ public class StaticProperty {
     //邮箱正则表达式
     public static final String EMAIL_REGULAT_EXPRESSIONS = "^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
     //服务器URL
-    public static final String SERVERURL = "http://10.0.2.2:8080/News/servlet/";
     //新闻SDKURL
     public static final String NEWS_SDK_URL = "http://v.juhe.cn/toutiao/index";
     //注册servlet
-    public static final String REGISTER_SERVLET = SERVERURL+"RegisterServlet";
+    public static final String REGISTER_SERVLET = "http://10.0.2.2:8080/News/servlet/RegisterServlet";
     //登录servlet
-    public static final String LOGIN_SERVLET = SERVERURL+"LoginServlet";
-
+    public static final String LOGIN_SERVLET = "http://10.0.2.2:8080/News/servlet/LoginServlet";
+    public static final String COMMENT_SERVLET = "http://10.0.2.2:8080/News/servlet/CommentServlet";
+    public static final String USER_COLLECT_NEWS_MANAGE_SERVLET = "http://10.0.2.2:8080/News/servlet/UserCollectNewsManageServlet";
+    public static final String GETINFO_SERVLET = "http://10.0.2.2:8080/News/servlet/GetInfoServlet";
 }

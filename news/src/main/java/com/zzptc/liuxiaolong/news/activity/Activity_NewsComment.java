@@ -45,6 +45,7 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
     private Button btn_earliest;
 
     private String url;
+    private String title;
     private PushData pushData;
     private CommentBean commentBean;
     @Override
@@ -62,8 +63,9 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
 
             Intent intent = getIntent();
             url = intent.getStringExtra("url");
+            title = intent.getStringExtra("title");
             pushData = new PushData(this);
-            pushData.getCommentList(url, "commentList");
+            pushData.getCommentList(url);
             pushData.setOnPushInfoListener(this);
 
 
@@ -75,7 +77,7 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
     private void getEvent(View view){
         switch (view.getId()){
             case R.id.tv_writeComment:
-                FragmentDialog_WriteComment fragmentDialog_writeComment = FragmentDialog_WriteComment.newInstance(url);
+                FragmentDialog_WriteComment fragmentDialog_writeComment = FragmentDialog_WriteComment.newInstance(url, title);
                 fragmentDialog_writeComment.show(getSupportFragmentManager(), null);
                 fragmentDialog_writeComment.setOnRequestResultListener(this);
                 break;
@@ -124,7 +126,8 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
     public void OnGetRequestResultStatusListener(int status) {
         switch (status){
             case 3:
-                pushData.getCommentList(url, "commentList");
+
+                pushData.getCommentList(url);
                 break;
         }
 
@@ -132,25 +135,24 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
 
 
     @Override
-    public void OnGetUserCollectNewsListListener(String json) {
-            final Gson gson = new Gson();
-            commentBean = gson.fromJson(json, CommentBean.class);
-            if (commentBean.getCommentCount() == 0){
-                tv_noComment.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.GONE);
-            }else{
-                tv_noComment.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                adapter = new CommentListAdapter(commentBean.getList(), this);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                recyclerView.setAdapter(adapter);
-                adapter.setOnClickListener(this);
+    public void OnGetRequestDataListener(String json) {
+        final Gson gson = new Gson();
+        commentBean = gson.fromJson(json, CommentBean.class);
+        //评论列表为空则不显示评论列表
+        if (commentBean.getCommentCount() == 0){
+            tv_noComment.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }else{
+            tv_noComment.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter = new CommentListAdapter(commentBean.getList(), this);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapter);
+            adapter.setOnClickListener(this);
 
-            }
+        }
     }
-
-
 
     public void select(int i){
         switch (i){
@@ -178,15 +180,10 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
         //登录后才可点赞
         if (UserInfoAuthentication.tokenExists(this)) {
 
-            final Comment comment = new Comment();
-            comment.setType("like");
-            comment.setLou(lou);
-            comment.setNewsId(url);
-            pushData.updateZan(comment);
+            pushData.like(url, lou);
             pushData.setOnRequestResultListener(new OnRequestResultListener() {
                 @Override
                 public void OnGetRequestResultStatusListener(int status) {
-                    System.out.println(status);
                     switch (status) {
                         case 1:
                             adapter.updateItemData(position);
@@ -204,4 +201,6 @@ public class Activity_NewsComment extends AppCompatActivity implements LoadFinsh
         }
 
     }
+
+
 }

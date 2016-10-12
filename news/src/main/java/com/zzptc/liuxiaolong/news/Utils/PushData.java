@@ -4,18 +4,13 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
-import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.javabean.ResultData;
-import com.zzptc.liuxiaolong.news.javabean.Comment;
-import com.zzptc.liuxiaolong.news.model.NewsData;
 import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
-
-import java.io.UnsupportedEncodingException;
 
 /**
  *
@@ -33,7 +28,7 @@ public class PushData {
 
     //接口 得到用户收藏新闻列表的json数据
     public interface OnPushInfoListener{
-        void OnGetUserCollectNewsListListener(String json);
+        void OnGetRequestDataListener(String json);
     }
 
 
@@ -50,120 +45,117 @@ public class PushData {
     public void setOnPushInfoListener(OnPushInfoListener listener){
         onPushInfoListener = listener;
     }
-    //上传收藏新闻方法
-    public void pushCollectNews(NewsData newsdata, String type){
-        new PushInfo().execute(new Object[]{newsdata, type});
-    }
 
-
-    public void sendComment (Comment comment){
-        new MyComment().execute(comment);
-
-    }
-
-    class PushInfo extends AsyncTask<Object, String, Void>{
-        @Override
-        protected Void doInBackground(final Object... params) {
-            NewsData newsData = (NewsData) params[0];
-
-            RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"UserCollectNewsManageServlet");
-            if ("collectNews".equals(params[1])){              //收藏新闻
-                rp.addParameter("type", params[1]);
-                rp.addParameter("newsTitle", newsData.getTitle());
-                rp.addParameter("newsUrl", newsData.getUrl());
-                rp.addParameter("collectTime", MyUtils.getNowTime());
-
-            }else if ("checkIsCollect".equals(params[1])){  //查看新闻是否已收藏
-                rp.addParameter("type", params[1]);
-                rp.addParameter("newsUrl", newsData.getUrl());
-
-            }else if("deleteCollect".equals(params[1])){    //删除收藏的新闻
-                rp.addParameter("type", params[1]);
-                rp.addParameter("newsUrl", newsData.getUrl());
-
-            }else if ("getCollectNewsList".equals(params[1])){
-                rp.addParameter("type", "getCollectNewsList");
-
-            }
+    /**
+     * 写评论
+     * @param content
+     * @param newsId
+     * @param title
+     */
+    public void writeComment (String content, String newsId, String title){
+        RequestParams rp = new RequestParams(StaticProperty.COMMENT_SERVLET);
+        if (UserInfoAuthentication.tokenExists(context)){
             rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
-            x.http().post(rp, new Callback.CommonCallback<String>() {
-                @Override
-                public void onCancelled(CancelledException cex) {
-
-                }
-
-                @Override
-                public void onError(Throwable ex, boolean isOnCallback) {
-
-                }
-
-                @Override
-                public void onSuccess(String result) {
-                    if (!"getCollectNewsList".equals(params[1])) {
-                        ResultData res = gson.fromJson(result, ResultData.class);
-                        publishProgress(String.valueOf(res.getStatus()), "");
-                    }else{
-                        publishProgress(result, "getCollectNewsList");
-                    }
-                }
-
-                @Override
-                public void onFinished() {
-
-                }
-            });
-            return null;
+        }else{
+            rp.addParameter("name", "匿名");
         }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-            if (values[1] == null || values[1].equals("")) {
-                if (onRequestResultListener != null){
-                    onRequestResultListener.OnGetRequestResultStatusListener(Integer.parseInt(values[0]));
-                }
-            }else {
-                if (onPushInfoListener != null) {
-                    try {
-                        String json = new String(values[0].getBytes(), "utf-8");
-                        onPushInfoListener.OnGetUserCollectNewsListListener(json);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        }
+            rp.addParameter("content", content);
+            rp.addParameter("type", "writeComment");
+            rp.addParameter("commentTime", MyUtils.getNowTime());
+            rp.addParameter("newsId", newsId);
+            rp.addParameter("title", title);
+        new GetRequestStatus().execute(rp);
     }
 
 
 
 
+    /**
+     * 获取新闻评论列表
+     * @param newsId
+     */
+    public void getCommentList(String newsId){
+        RequestParams rp = new RequestParams(StaticProperty.COMMENT_SERVLET);
+        rp.addParameter("type", "commentList");
+        rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
+        rp.addParameter("newsId", newsId);
+        new GetRequestData().execute(rp);
+    }
 
-    class MyComment extends AsyncTask<Comment, Integer, Void>{
+
+
+    /**
+     * like 点赞
+     * @param newsId
+     * @param lou
+     */
+    public void like(String newsId, int lou){
+        RequestParams rp = new RequestParams(StaticProperty.COMMENT_SERVLET);
+        rp.addParameter("type", "like");
+        rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
+        rp.addParameter("newsId", newsId);
+        rp.addParameter("lou", lou);
+        new GetRequestStatus().execute(rp);
+
+    }
+    /**
+     * 获取评论列表
+     */
+    public void getCollectNewsList(){
+        RequestParams rp = new RequestParams(StaticProperty.USER_COLLECT_NEWS_MANAGE_SERVLET);
+        rp.addParameter("type", "getCollectNewsList");
+        rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
+        new GetRequestData().execute(rp);
+
+    }
+
+    /**
+     * 收藏新闻
+     * @param newsTitle
+     * @param newsUrl
+     */
+    public void collectNews(String newsTitle, String newsUrl){
+        RequestParams rp = new RequestParams(StaticProperty.USER_COLLECT_NEWS_MANAGE_SERVLET);
+        rp.addParameter("type", "collectNews");
+        rp.addParameter("newsTitle", newsTitle);
+        rp.addParameter("newsUrl", newsUrl);
+        rp.addParameter("collectTime",  MyUtils.getNowTime());
+        rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
+        new GetRequestStatus().execute(rp);
+    }
+
+    /**
+     * 检查新闻是否已收藏
+     * @param newsUrl
+     */
+    public void checkIsCollect(String newsUrl){
+        RequestParams rp = new RequestParams(StaticProperty.USER_COLLECT_NEWS_MANAGE_SERVLET);
+        rp.addParameter("type", "checkIsCollect");
+        rp.addParameter("newsUrl", newsUrl);
+        rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
+        new GetRequestStatus().execute(rp);
+    }
+
+    /**
+     * 删除收藏
+     */
+    public void deleteCollect(){
+        RequestParams rp = new RequestParams(StaticProperty.USER_COLLECT_NEWS_MANAGE_SERVLET);
+        rp.addParameter("type", "deleteCollect");
+        rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
+        new GetRequestStatus().execute(rp);
+    }
+
+
+
+    class GetRequestStatus extends AsyncTask<RequestParams, Integer, Void>{
 
         @Override
-        protected Void doInBackground(Comment... params) {
-            RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"CommentServlet");
-            if (UserInfoAuthentication.tokenExists(context)){
-                rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
-            }else{
-                rp.addParameter("name", "匿名");
-            }
-            rp.addParameter("type", "sendComment");
-            rp.addParameter("commentTime", MyUtils.getNowTime());
-            rp.addParameter("content", params[0].getContent());
-            rp.addParameter("newsId", params[0].getNewsId());
-
+        protected Void doInBackground(RequestParams... params) {
+            RequestParams rp = params[0];
             x.http().post(rp, new Callback.CommonCallback<String>() {
                 @Override
-                public void onCancelled(CancelledException cex) {
-
-                }
-
-                @Override
                 public void onSuccess(String result) {
-                    Gson gson = new Gson();
                     ResultData res = gson.fromJson(result, ResultData.class);
                     publishProgress(res.getStatus());
                 }
@@ -177,6 +169,11 @@ public class PushData {
                 public void onError(Throwable ex, boolean isOnCallback) {
 
                 }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+
+                }
             });
             return null;
         }
@@ -187,34 +184,28 @@ public class PushData {
             if (onRequestResultListener != null){
                 onRequestResultListener.OnGetRequestResultStatusListener(values[0]);
             }
+
         }
     }
 
-    public void getCommentList(String newsId, String type){
-        new GetCommentList().execute(new String[]{newsId, type});
-    }
 
-    class GetCommentList extends AsyncTask<String, String, Void>{
-
+    class GetRequestData extends AsyncTask<RequestParams, String, Void>{
         @Override
-        protected Void doInBackground(String... params) {
-            RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"CommentServlet");
-                rp.addParameter("type", params[1]);
-                rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
-                rp.addParameter("newsId", params[0]);
-
+        protected Void doInBackground(RequestParams... params) {
+            RequestParams rp = params[0];
             x.http().post(rp, new Callback.CommonCallback<String>() {
                 @Override
-                public void onCancelled(CancelledException cex) {
+                public void onError(Throwable ex, boolean isOnCallback) {
 
                 }
+
                 @Override
                 public void onSuccess(String result) {
                     publishProgress(result);
                 }
 
                 @Override
-                public void onError(Throwable ex, boolean isOnCallback) {
+                public void onCancelled(CancelledException cex) {
 
                 }
 
@@ -229,63 +220,11 @@ public class PushData {
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-
             if (onPushInfoListener != null){
-                onPushInfoListener.OnGetUserCollectNewsListListener(values[0]);
+                onPushInfoListener.OnGetRequestDataListener(values[0]);
             }
-
         }
     }
-
-    public void updateZan(Comment comment){
-        new Like().execute(comment);
-
-    }
-    class Like extends AsyncTask<Comment, Integer, Void>{
-
-        @Override
-        protected Void doInBackground(Comment... params) {
-            RequestParams rp = new RequestParams(StaticProperty.SERVERURL+"CommentServlet");
-            rp.addParameter("type", params[0].getType());
-            rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
-            rp.addParameter("newsId", params[0].getNewsId());
-            rp.addParameter("lou", params[0].getLou());
-            x.http().post(rp, new Callback.CommonCallback<String>() {
-                @Override
-                public void onCancelled(CancelledException cex) {
-
-                }
-
-                @Override
-                public void onSuccess(String result) {
-                    ResultData res = gson.fromJson(result, ResultData.class);
-                    publishProgress(res.getStatus());
-                }
-
-                @Override
-                public void onFinished() {
-
-                }
-
-                @Override
-                public void onError(Throwable ex, boolean isOnCallback) {
-
-                }
-            });
-            return null;
-        }
-
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            if (onRequestResultListener != null){
-                onRequestResultListener.OnGetRequestResultStatusListener(values[0]);
-            }
-
-        }
-    }
-
 
 
 }

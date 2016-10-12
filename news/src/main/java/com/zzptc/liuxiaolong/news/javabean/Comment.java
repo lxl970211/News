@@ -14,7 +14,7 @@ public class Comment implements Serializable{
     private int like;
     private String newsId;//以新闻url为id
     private Integer lou;
-    private String type;
+    private String title;
     public String getToken() {
         return token;
     }
@@ -72,11 +72,12 @@ public class Comment implements Serializable{
         return lou;
     }
 
-    public void setType(String type) {
-        this.type = type;
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getType() {
-        return type;
+    public String getTitle() {
+        return title;
     }
 }

@@ -83,7 +83,7 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
         x.view().inject(this);
         System.out.println(UserInfoAuthentication.getTokeninfo(x.app(), "token"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         }
             //如果系统版本为6.0则向用户取要读取内存卡权限

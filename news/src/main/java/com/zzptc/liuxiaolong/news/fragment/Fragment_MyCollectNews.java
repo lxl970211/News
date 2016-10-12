@@ -8,12 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -33,7 +28,6 @@ import com.zzptc.liuxiaolong.news.javabean.CollectNewsData;
 import com.zzptc.liuxiaolong.news.model.NewsData;
 import com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView;
 import com.zzptc.liuxiaolong.news.view.LoadFinshCallBack;
-import com.zzptc.liuxiaolong.news.view.MyGestureDetector;
 import com.zzptc.liuxiaolong.news.view.OnLongClickListener;
 import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
 
@@ -91,7 +85,7 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
             //已登录
             if (UserInfoAuthentication.tokenExists(getContext())){
                 pushData = new PushData(getContext());
-                pushData.pushCollectNews(null, "getCollectNewsList");
+                pushData.getCollectNewsList();
                 pushData.setOnPushInfoListener(this);
                 pushData.setOnRequestResultListener(this);
                 registerForContextMenu(autoLoadRecyclerView);
@@ -109,9 +103,8 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
 
 
     }
-
     @Override
-    public void OnGetUserCollectNewsListListener(String json) {
+    public void OnGetRequestDataListener(String json) {
         Gson gson = new Gson();
         CollectNewsBean collectNewsBean = gson.fromJson(json, CollectNewsBean.class);
         List<CollectNewsData> list = collectNewsBean.getList();
@@ -124,7 +117,9 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
         }else {
             no_collectNews.setVisibility(View.VISIBLE);
         }
+
     }
+
 
 
     @Override
@@ -151,7 +146,7 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
                             case 1:
                                 NewsData newsData = new NewsData();
                                 newsData.setUrl(url);
-                                pushData.pushCollectNews(newsData, "deleteCollect");
+                                pushData.deleteCollect();
                                 Itemposition = position;
                                 break;
                         }
@@ -170,4 +165,6 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
                 break;
         }
     }
+
+
 }

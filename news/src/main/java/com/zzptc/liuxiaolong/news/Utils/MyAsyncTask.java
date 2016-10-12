@@ -43,7 +43,7 @@ public class MyAsyncTask {
                 publishProgress(name);
             }else {
 
-                RequestParams rp = new RequestParams(StaticProperty.SERVERURL + "GetInfoServlet");
+                RequestParams rp = new RequestParams(StaticProperty.GETINFO_SERVLET);
                 rp.addParameter("type", "BasicInfo");
                 rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
 

@@ -162,7 +162,7 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
 
             //检查是否已收藏
             if (NetWorkStatus.getNetWorkType(this) != 0 && UserInfoAuthentication.tokenExists(this)){
-                pushData.pushCollectNews(newsData, "checkIsCollect");
+                pushData.checkIsCollect(newsData.getUrl());
                 pushData.setOnRequestResultListener(this);
 
             }
@@ -177,7 +177,7 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
         super.onResume();
         //获取评论列表
         if (NetWorkStatus.getNetWorkType(this) != 0){
-            pushData.getCommentList(newsData.getUrl(), "commentList");
+            pushData.getCommentList(newsData.getUrl());
             pushData.setOnPushInfoListener(this);
         }
     }
@@ -189,7 +189,7 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
     private void getEvent(View v){
         switch (v.getId()){
             case R.id.rl_writeReview: //写评论
-                FragmentDialog_WriteComment dialog_writeComment = FragmentDialog_WriteComment.newInstance(newsData.getUrl());
+                FragmentDialog_WriteComment dialog_writeComment = FragmentDialog_WriteComment.newInstance(newsData.getUrl(), newsData.getTitle());
                 dialog_writeComment.show(getSupportFragmentManager(), null);
                 dialog_writeComment.setOnRequestResultListener(this);
                 break;
@@ -200,10 +200,10 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
                     if (UserInfoAuthentication.tokenExists(this)) {
                         if (!isLike) {
                             Toast.makeText(this, "已收藏", Toast.LENGTH_SHORT).show();
-                            pushData.pushCollectNews(newsData, "collectNews");
+                            pushData.collectNews(newsData.getTitle(), newsData.getUrl());
                         }else{
                             Toast.makeText(this, "已取消收藏", Toast.LENGTH_SHORT).show();
-                            pushData.pushCollectNews(newsData, "deleteCollect");
+                            pushData.deleteCollect();
                         }
 
                     }else{
@@ -223,7 +223,7 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
             case R.id.tv_sumReview:
                 Intent intent = new Intent(this, Activity_NewsComment.class);
                 intent.putExtra("url", newsData.getUrl());
-
+                intent.putExtra("title", newsData.getTitle());
                 startActivity(intent);
                 MyAnimator.openActivityAnim(this);
                 break;
@@ -248,25 +248,27 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
     public void OnGetRequestResultStatusListener(int status) {
         switch (status){
             case 1:
+                //收藏成功 改收藏图标颜色为红色
                 iv_like.setColorFilter(getResources().getColor(android.R.color.holo_red_dark));
                 isLike = true;
                 break;
 
             case 0:
+                //取消收藏 将颜色改回
                 iv_like.setColorFilter(getResources().getColor(android.R.color.darker_gray));
                 isLike = false;
                 break;
             case 3:
-                pushData.getCommentList(newsData.getUrl(), "commentList");
+                pushData.getCommentList(newsData.getUrl());
                 break;
         }
     }
 
     @Override
-    public void OnGetUserCollectNewsListListener(String json) {
-            Gson gson = new Gson();
-            commentBean = gson.fromJson(json, CommentBean.class);
-            tv_sumReview.setText(commentBean.getCommentCount()+"");
-
+    public void OnGetRequestDataListener(String json) {
+        //得到新闻评论数量
+        Gson gson = new Gson();
+        commentBean = gson.fromJson(json, CommentBean.class);
+        tv_sumReview.setText(commentBean.getCommentCount()+"");
     }
 }

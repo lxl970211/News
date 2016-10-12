@@ -18,7 +18,6 @@ import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
 import com.zzptc.liuxiaolong.news.Utils.PushData;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
-import com.zzptc.liuxiaolong.news.javabean.Comment;
 import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
 
 import org.xutils.view.annotation.ContentView;
@@ -44,13 +43,16 @@ public class FragmentDialog_WriteComment extends DialogFragment implements OnReq
 
     //评论完成后监听
     private OnRequestResultListener onRequestResultListener;
+
     public void setOnRequestResultListener(OnRequestResultListener listener){
         onRequestResultListener = listener;
     }
-    public static FragmentDialog_WriteComment newInstance(String url){
+
+    public static FragmentDialog_WriteComment newInstance(String url, String title){
         FragmentDialog_WriteComment fragmentDialog_writeComment = new FragmentDialog_WriteComment();
         Bundle bundle = new Bundle();
         bundle.putString("url", url);
+        bundle.putString("title", title);
         fragmentDialog_writeComment.setArguments(bundle);
         return fragmentDialog_writeComment;
     }
@@ -77,12 +79,14 @@ public class FragmentDialog_WriteComment extends DialogFragment implements OnReq
                 if (NetWorkStatus.getNetWorkType(getContext()) != 0) {
 
                         if (et_write_comment.getText().toString() != null && !et_write_comment.getText().toString().equals("")) {
-                            Comment comment = new Comment();
                             Bundle bundle = getArguments();
-                            comment.setNewsId(bundle.getString("url"));
-                            comment.setContent(et_write_comment.getText().toString());
+
+                            String newsId = bundle.getString("url");
+                            String title = bundle.getString("title");
+                            String content = et_write_comment.getText().toString();
                             pushData = new PushData(getContext());
-                            pushData.sendComment(comment);
+                            pushData.writeComment(content, newsId, title);
+
                             pushData.setOnRequestResultListener(this);
                             dismiss();
                         } else {
@@ -118,8 +122,9 @@ public class FragmentDialog_WriteComment extends DialogFragment implements OnReq
 
     @Override
     public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-        super.onDismiss(dialog);
+
     }
 }
