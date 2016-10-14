@@ -42,7 +42,7 @@
             android:layout_below="@id/iv_userhead"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="刘小龙"
+            android:text="点击登录"
             android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
@@ -54,59 +54,40 @@
         android:orientation="vertical"
         android:layout_weight="3">
 
-        <LinearLayout
-            android:id="@+id/user_setting"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@mipmap/ic_settings_black_48dp"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                />
+            android:layout_height="wrap_content">
+
             <TextView
                 style="@style/settingBtnItemStyle"
-                android:text="@string/user_setting"
+                android:layout_width="wrap_content"
+                android:text="@string/login_email"
+                android:id="@+id/textView4" />
+            <TextView
+                android:id="@+id/tv_myemail"
+                style="@style/settingBtnItemStyle"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text=""
+                android:textColor="#e1e1e1"
                 />
-        </LinearLayout>
+        </RelativeLayout>
 
 
-
-        <LinearLayout
-            android:id="@+id/Feedback"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@mipmap/ic_feedback_black_48dp"
-                android:layout_gravity="center"
-                />
             <TextView
                 style="@style/settingBtnItemStyle"
                 android:text="@string/feedback"
-                />
-        </LinearLayout>
+                android:id="@+id/tv_feedback" />
+
         <RelativeLayout
             android:id="@+id/clear_cache"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp">
+            >
 
-            <ImageView
-                android:id="@+id/clear_cache_img"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@mipmap/ic_clear_all_black_48dp"
-                android:layout_centerVertical="true"
-                />
             <TextView
                 android:id="@+id/clear_cache_btn"
                 style="@style/settingBtnItemStyle"
-                android:layout_toRightOf="@id/clear_cache_img"
                 android:text="@string/clear_cache"
                 android:layout_width="wrap_content"
                 />
@@ -121,20 +102,16 @@
                 />
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/about_app"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp">
+            <TextView
+                style="@style/settingBtnItemStyle"
+                android:text="检查更新"/>
 
             <TextView
                 style="@style/settingBtnItemStyle"
                 android:text="@string/about_app"
-                android:layout_width="342dp"
-                android:id="@+id/textView" />
+                android:layout_width="match_parent"
+                android:id="@+id/tv_aboutapp" />
         </LinearLayout>
-
-    </LinearLayout>
 
 
 </LinearLayout>

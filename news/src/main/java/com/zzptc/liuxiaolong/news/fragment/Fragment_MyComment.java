@@ -58,8 +58,7 @@ public class Fragment_MyComment extends Fragment implements PushData.OnPushInfoL
 
 
             }else{
-                startActivity(new Intent(getContext(), Activity_Login.class));
-                MyAnimator.openActivityAnim(getActivity());
+
             }
         }else{
             Toast.makeText(getContext(), "请检查网络连接", Toast.LENGTH_SHORT).show();

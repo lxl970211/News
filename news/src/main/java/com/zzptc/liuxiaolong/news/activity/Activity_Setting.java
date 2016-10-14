@@ -1,10 +1,14 @@
 package com.zzptc.liuxiaolong.news.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,8 +16,13 @@ import android.widget.Toast;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.FileUtils;
 import com.zzptc.liuxiaolong.news.Utils.MyAsyncTask;
+import com.zzptc.liuxiaolong.news.Utils.MyUtils;
+import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
+import com.zzptc.liuxiaolong.news.content.ResultCodes;
+import com.zzptc.liuxiaolong.news.fragment.Fragment_modifyName_dialog;
 import com.zzptc.liuxiaolong.news.view.BaseActivity;
+import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -21,22 +30,22 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 @ContentView(R.layout.activity_setting)
-public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetUserInfoListener{
+public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetUserInfoListener, OnRequestResultListener{
     @ViewInject(R.id.setting_toolbar)
     private Toolbar toolbar;
-    @ViewInject(R.id.user_setting)
-    private LinearLayout user_setting;
-
     @ViewInject(R.id.clear_cache)
     private LinearLayout clear_cache;
-    @ViewInject(R.id.about_app)
-    private LinearLayout about_app;
+    @ViewInject(R.id.tv_aboutapp)
+    private TextView tv_aboutapp;
     @ViewInject(R.id.clear_cache_size)
     private TextView clearsize;
-    @ViewInject(R.id.Feedback)
-    private LinearLayout feedback;
+    @ViewInject(R.id.tv_feedback)
+    private TextView feedback;
     @ViewInject(R.id.tv_userName)
     private TextView tv_userName;
+    @ViewInject(R.id.tv_myemail)
+    private TextView myemail;
+
     private Handler handler;
     private MyAsyncTask myAsyncTask;
     @Override
@@ -62,6 +71,8 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
                 MyAnimator.closeActivityAnim(Activity_Setting.this);
             }
         });
+
+
     }
 
 
@@ -70,17 +81,17 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
      * 点击监听
      * @param v
      */
-    @Event({R.id.about_app, R.id.user_setting, R.id.clear_cache,R.id.Feedback})
+    @Event({R.id.tv_aboutapp,  R.id.clear_cache,R.id.tv_feedback, R.id.iv_userhead, R.id.tv_userName})
     private void getEvent(View v){
         switch (v.getId()){
-            case R.id.about_app:
+            case R.id.tv_aboutapp:
                 Intent openAbout_app = new Intent(x.app(), Activity_Feedback.class);
                 openAbout_app.setAction("aboutapp");
                 startActivity(openAbout_app);
                 MyAnimator.openActivityAnim(Activity_Setting.this);
 
                 break;
-            case R.id.Feedback:
+            case R.id.tv_feedback:
                 Intent feedback = new Intent(x.app(), Activity_Feedback.class);
                 feedback.setAction("feedback");
                 startActivity(feedback);
@@ -92,11 +103,27 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
                 handler.post(clearCache);
                 break;
 
+            case R.id.iv_userhead:
+                if (UserInfoAuthentication.tokenExists(this)){
+                }else{
+                   MyUtils.login(this);
+                }
 
-            case R.id.user_setting:
-                Toast.makeText(x.app(), "用户设置", Toast.LENGTH_SHORT).show();
                 break;
 
+            case R.id.tv_userName:
+                if (!UserInfoAuthentication.tokenExists(this)){
+                    //跳转到登录页面
+                    MyUtils.login(this);
+                }else{
+                    //修改用户名
+                    Fragment_modifyName_dialog fragment_modifyName_dialog = new Fragment_modifyName_dialog();
+                    fragment_modifyName_dialog.show(getSupportFragmentManager(), null);
+                    fragment_modifyName_dialog.setOnRequestResultListener(this);
+
+                }
+
+                break;
         }
 
     }
@@ -129,7 +156,30 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
     }
 
     @Override
-    public void OnGetUserInfoListener(String name) {
+    public void OnGetUserInfoListener(String name, String email) {
         tv_userName.setText(name);
+        myemail.setText(email);
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ResultCodes.LOGIN_AUCCESS && resultCode == ResultCodes.LOGIN_AUCCESS){
+            myAsyncTask.getinfo();
+        }
+
+    }
+
+    @Override
+    public void OnGetRequestResultStatusListener(int status) {
+        switch (status){
+            case 1:
+
+                myAsyncTask.getinfo();
+                myAsyncTask.setOnGetUserInfoListener(this);
+                break;
+        }
     }
 }

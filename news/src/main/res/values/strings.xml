@@ -39,4 +39,7 @@
     <string name="buttress">支持</string>
     <string name="contra">反对</string>
     <string name="reply">回复</string>
+
+    <string name="signUp">退出</string>
+    <string name="modifyUserName">昵称</string>
 </resources>

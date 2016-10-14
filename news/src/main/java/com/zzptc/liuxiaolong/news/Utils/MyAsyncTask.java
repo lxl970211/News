@@ -19,7 +19,7 @@ import org.xutils.x;
 public class MyAsyncTask {
     private Context context;
     public interface OnGetUserInfoListener{
-        void OnGetUserInfoListener(String name);
+        void OnGetUserInfoListener(String name, String email);
     }
     private OnGetUserInfoListener onGetUserInfoListener;
 
@@ -40,7 +40,8 @@ public class MyAsyncTask {
             //token存在并且name不为空
             if (UserInfoAuthentication.tokenExists(context) && UserInfoAuthentication.getTokeninfo(context, "name") != ""){
                 String name = UserInfoAuthentication.getTokeninfo(context, "name");
-                publishProgress(name);
+                String email = UserInfoAuthentication.getTokeninfo(context, "email");
+                publishProgress(name, email);
             }else {
 
                 RequestParams rp = new RequestParams(StaticProperty.GETINFO_SERVLET);
@@ -58,7 +59,7 @@ public class MyAsyncTask {
                     public void onSuccess(String result) {
                         Gson g = new Gson();
                         User user = g.fromJson(result, User.class);
-                        publishProgress(user.getUserName());
+                        publishProgress(user.getUserName(), null);
                     }
 
                     @Override
@@ -84,7 +85,7 @@ public class MyAsyncTask {
                 SharedPreferences.Editor editor = context.getSharedPreferences("token", Context.MODE_PRIVATE).edit();
                 editor.putString("name", str[0]);
                 editor.commit();
-                onGetUserInfoListener.OnGetUserInfoListener(str[0]);
+                onGetUserInfoListener.OnGetUserInfoListener(str[0], str[1]);
             }
         }
     }

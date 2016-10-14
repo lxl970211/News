@@ -81,7 +81,6 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         x.view().inject(this);
-        System.out.println(UserInfoAuthentication.getTokeninfo(x.app(), "token"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
 //            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
@@ -308,8 +307,9 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
     }
 
 
+
     @Override
-    public void OnGetUserInfoListener(String name) {
+    public void OnGetUserInfoListener(String name, String email) {
         user_login.setText(name);
     }
 }

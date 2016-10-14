@@ -155,6 +155,15 @@ public class PushData {
         rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
         new GetRequestData().execute(rp);
     }
+
+
+    public void updateUserName(String newName){
+        RequestParams rp = new RequestParams(StaticProperty.GETINFO_SERVLET);
+        rp.addParameter("type", "updateName");
+        rp.addParameter("newName", newName);
+        rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
+        new GetRequestStatus().execute(rp);
+    }
     class GetRequestStatus extends AsyncTask<RequestParams, Integer, Void>{
 
         @Override

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zzptc.liuxiaolong.news.R;
+import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
 import com.zzptc.liuxiaolong.news.Utils.PushData;
 import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
@@ -23,6 +24,8 @@ import com.zzptc.liuxiaolong.news.activity.Activity_Login;
 import com.zzptc.liuxiaolong.news.activity.Activity_NewsDetail;
 import com.zzptc.liuxiaolong.news.adapter.CollectNewsAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
+import com.zzptc.liuxiaolong.news.content.ResultCodes;
+import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.javabean.CollectNewsBean;
 import com.zzptc.liuxiaolong.news.javabean.CollectNewsData;
 import com.zzptc.liuxiaolong.news.model.NewsData;
@@ -66,7 +69,7 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
 
     public void init(){
 
-
+        pushData = new PushData(getContext());
 
 
         loadFinshCallBack = autoLoadRecyclerView;
@@ -84,14 +87,13 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
         if (NetWorkStatus.getNetWorkType(getContext()) != 0){
             //已登录
             if (UserInfoAuthentication.tokenExists(getContext())){
-                pushData = new PushData(getContext());
+
                 pushData.getCollectNewsList();
                 pushData.setOnPushInfoListener(this);
                 pushData.setOnRequestResultListener(this);
                 registerForContextMenu(autoLoadRecyclerView);
             }else {
-                startActivity(new Intent(getContext(), Activity_Login.class));
-                MyAnimator.openActivityAnim(getActivity());
+                MyUtils.login(getActivity());
             }
         }else {
             Toast.makeText(getContext(), "请检查网络连接", Toast.LENGTH_SHORT).show();
@@ -166,5 +168,13 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
         }
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ResultCodes.LOGIN_AUCCESS && resultCode == ResultCodes.LOGIN_AUCCESS){
+            pushData.getCollectNewsList();
+            pushData.setOnPushInfoListener(this);
+            pushData.setOnRequestResultListener(this);
+        }
+    }
 }

@@ -1,7 +1,13 @@
 package com.zzptc.liuxiaolong.news.Utils;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 
+
+import com.zzptc.liuxiaolong.news.activity.Activity_Login;
+import com.zzptc.liuxiaolong.news.animator.MyAnimator;
+import com.zzptc.liuxiaolong.news.content.ResultCodes;
 
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -108,5 +114,12 @@ public class MyUtils {
         }else{
             return time/(3600*24*1000)+"天";
         }
+    }
+
+
+    public static void login(Activity activity){
+        Intent intent = new Intent(activity, Activity_Login.class);
+        activity.startActivityForResult(intent, ResultCodes.LOGIN_AUCCESS);
+        MyAnimator.openActivityAnim(activity);
     }
 }

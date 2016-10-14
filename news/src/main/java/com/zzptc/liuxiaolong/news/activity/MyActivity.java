@@ -53,7 +53,6 @@ public class MyActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
         MyAnimator.closeActivityAnim(this);
     }
 }

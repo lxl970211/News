@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:layout_margin="10dp"
+    tools:context="com.zzptc.liuxiaolong.news.fragment.Fragment_modifyName_dialog">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="修改昵称"
+            android:textSize="17sp"/>
+
+        <EditText
+            android:id="@+id/et_modifyusername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:id="@+id/btn_modifyname_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/cancel"
+                android:background="@drawable/setting_btn_shape"
+                android:textColor="@color/blue"/>
+
+            <Button
+                android:id="@+id/btn_modifyname_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/setting_btn_shape"
+                android:text="@string/submit"
+                android:textColor="@color/blue"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
