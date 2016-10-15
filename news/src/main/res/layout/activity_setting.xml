@@ -23,7 +23,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="1.69"
         app:layout_collapseMode="parallax"
         android:background="@android:color/holo_blue_light"
         >
@@ -43,7 +43,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="点击登录"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            />
 
     </RelativeLayout>
 
@@ -111,6 +112,15 @@
                 android:text="@string/about_app"
                 android:layout_width="match_parent"
                 android:id="@+id/tv_aboutapp" />
+
+            <Button
+                android:id="@+id/btn_signUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/blue"
+                android:textColor="@color/white"
+                android:text="@string/signUp"
+                android:layout_margin="10dp"/>
         </LinearLayout>
 
 

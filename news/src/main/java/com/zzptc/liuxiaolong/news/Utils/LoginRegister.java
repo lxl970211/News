@@ -58,7 +58,7 @@ public class LoginRegister {
                 rp = new RequestParams(StaticProperty.LOGIN_SERVLET);
                 rp.addParameter("user_email", params[0].getUserEmail());
                 rp.addParameter("user_password", params[0].getUserPassword());
-                rp.addParameter("token", MyUtils.myToken(params[0].getUserPassword()));
+                rp.addParameter("token", MyUtils.myToken(params[0].getUserPassword(), params[0].getUserEmail()));
 
             }else if("email".equals(user.getType())) {  //验证邮箱
                 if (!MyUtils.EditTextFormat(user.getUserEmail(), StaticProperty.EMAIL_REGULAT_EXPRESSIONS)) {

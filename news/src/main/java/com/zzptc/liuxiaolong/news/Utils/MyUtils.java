@@ -67,8 +67,8 @@ public class MyUtils {
     /*
     生成token
      */
-    public static String myToken(String userpassword){
-        return Build.MODEL+new MyUtils().getMac()+userpassword;
+    public static String myToken(String userpassword, String email){
+        return Build.MODEL+new MyUtils().getMac()+userpassword+email;
     }
 
     /*

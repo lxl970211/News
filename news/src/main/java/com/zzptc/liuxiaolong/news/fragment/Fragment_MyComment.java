@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -20,6 +21,7 @@ import com.zzptc.liuxiaolong.news.activity.Activity_Login;
 import com.zzptc.liuxiaolong.news.activity.Activity_NewsDetail;
 import com.zzptc.liuxiaolong.news.adapter.MyCommentListAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
+import com.zzptc.liuxiaolong.news.javabean.CollectNewsData;
 import com.zzptc.liuxiaolong.news.javabean.CommentBean;
 import com.zzptc.liuxiaolong.news.model.NewsData;
 import com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView;
@@ -28,6 +30,8 @@ import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,8 +42,12 @@ public class Fragment_MyComment extends Fragment implements PushData.OnPushInfoL
 
     @ViewInject(R.id.recy_mycomment)
     private AutoLoadRecyclerView autoLoadRecyclerView;
+    @ViewInject(R.id.no_comment)
+    private TextView nocomment;
     private MyCommentListAdapter adapter;
     private PushData pushData;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,10 +63,6 @@ public class Fragment_MyComment extends Fragment implements PushData.OnPushInfoL
             if (UserInfoAuthentication.tokenExists(getContext())){
                 pushData.getMyCommentList();
                 pushData.setOnPushInfoListener(this);
-
-
-            }else{
-
             }
         }else{
             Toast.makeText(getContext(), "请检查网络连接", Toast.LENGTH_SHORT).show();
@@ -70,12 +74,15 @@ public class Fragment_MyComment extends Fragment implements PushData.OnPushInfoL
     @Override
     public void OnGetRequestDataListener(String json) {
         CommentBean commentbean = new Gson().fromJson(json, CommentBean.class);
-        adapter = new MyCommentListAdapter(commentbean.getList(), getContext());
-        adapter.setOnClickListener(this);
-        autoLoadRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        autoLoadRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        autoLoadRecyclerView.setAdapter(adapter);
-
+        if (commentbean.getList().size() > 0) {
+            adapter = new MyCommentListAdapter(commentbean.getList(), getContext());
+            adapter.setOnClickListener(this);
+            autoLoadRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            autoLoadRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            autoLoadRecyclerView.setAdapter(adapter);
+        }else{
+            nocomment.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

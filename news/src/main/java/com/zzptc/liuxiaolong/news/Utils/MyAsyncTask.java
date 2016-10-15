@@ -41,6 +41,9 @@ public class MyAsyncTask {
             if (UserInfoAuthentication.tokenExists(context) && UserInfoAuthentication.getTokeninfo(context, "name") != ""){
                 String name = UserInfoAuthentication.getTokeninfo(context, "name");
                 String email = UserInfoAuthentication.getTokeninfo(context, "email");
+                if (name.equals("")){
+                    name = "登录";
+                }
                 publishProgress(name, email);
             }else {
 

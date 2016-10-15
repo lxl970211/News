@@ -19,6 +19,7 @@ import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.LoginRegister;
 import com.zzptc.liuxiaolong.news.Utils.MD5;
 import com.zzptc.liuxiaolong.news.Utils.MyUtils;
+import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.javabean.User;
@@ -104,6 +105,7 @@ public class Fragment_Login extends Fragment implements LoginRegister.OnLoginReg
                 getActivity().setResult(ResultCodes.LOGIN_AUCCESS);
                 //登录成功关闭登录界面
                 getActivity().finish();
+                MyAnimator.closeActivityAnim(getActivity());
                 break;
             case ResultCodes.LOGIN_ERROR:
                 Toast.makeText(getContext(), "请输入正确的用户名和密码", Toast.LENGTH_SHORT).show();

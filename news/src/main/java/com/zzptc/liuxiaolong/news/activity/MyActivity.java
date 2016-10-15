@@ -6,9 +6,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.zzptc.liuxiaolong.news.R;
+import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
+import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.fragment.Fragment_MyCollectNews;
 import com.zzptc.liuxiaolong.news.fragment.Fragment_MyComment;
+import com.zzptc.liuxiaolong.news.fragment.Fragment_aboutapp;
+import com.zzptc.liuxiaolong.news.fragment.Fragment_feedback;
 import com.zzptc.liuxiaolong.news.view.BaseActivity;
 
 import org.xutils.view.annotation.ContentView;
@@ -45,6 +49,12 @@ public class MyActivity extends BaseActivity {
         }else if (intent.getAction().equals("my_collect")){
             toolbar.setTitle("我的收藏");
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my, new Fragment_MyCollectNews()).commit();
+        }else if (intent.getAction().equals("aboutApp")){
+            toolbar.setTitle("关于");
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my, new Fragment_aboutapp()).commit();
+        }else if (intent.getAction().equals("feedback")){
+            toolbar.setTitle("意见反馈");
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my, new Fragment_feedback()).commit();
         }
     }
 
@@ -54,5 +64,10 @@ public class MyActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         MyAnimator.closeActivityAnim(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

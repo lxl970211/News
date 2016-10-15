@@ -20,7 +20,7 @@
     <string name="developer">开发人员：刘小龙</string>
     <string name="company">单位地址：湖南汽车工程职业学院</string>
     <string name="email">联系邮箱：lxl970211@outlook.com</string>
-    <string name="feedback_hint">您的每一次反馈及建议都是对我们的鼓励，我们会及时查看你的建议并及时反馈您</string>
+    <string name="feedback_hint">您的每一次反馈及建议都是对我们的鼓励，我们会及时查看你的建议并及时回复您</string>
     <string name="Contact_information">请留下您的联系方式 手机/邮箱</string>
     <string name="submit">提交</string>
     <string name="login_email">邮箱</string>

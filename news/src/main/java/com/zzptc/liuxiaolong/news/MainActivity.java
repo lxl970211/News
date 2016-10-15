@@ -19,12 +19,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhy.autolayout.AutoLayoutActivity;
 import com.zzptc.liuxiaolong.news.Utils.MyAsyncTask;
+import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.activity.Activity_Login;
 import com.zzptc.liuxiaolong.news.activity.Activity_SearchNews;
@@ -104,7 +104,7 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
 
 
     public void init(){
-
+        myAsyncTask = new MyAsyncTask(this);
         handler = new Handler();
 
 
@@ -143,26 +143,35 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
                 int id = item.getItemId();
                 switch (id){
                     case R.id.my_comment:
-                        //跳转到我的评论页面
-                        Intent intent = new Intent(MainActivity.this, MyActivity.class);
-                        intent.setAction("my_comment");
-                        startActivity(intent);
-                        //跳转动画
-                        MyAnimator.openActivityAnim(MainActivity.this);
+                        if (UserInfoAuthentication.tokenExists(MainActivity.this)) {
+                            //跳转到我的评论页面
+                            Intent intent = new Intent(MainActivity.this, MyActivity.class);
+                            intent.setAction("my_comment");
+                            startActivity(intent);
+                            //跳转动画
+                            MyAnimator.openActivityAnim(MainActivity.this);
+                        }else{
+                            MyUtils.login(MainActivity.this);
+                        }
                         break;
 
                     case R.id.my_collect:
-                        //跳转到我的收藏页面
-                        Intent intent1 = new Intent(MainActivity.this, MyActivity.class);
-                        intent1.setAction("my_collect");
-                        startActivity(intent1);
-                        //跳转动画
-                        MyAnimator.openActivityAnim(MainActivity.this);
+                        if (UserInfoAuthentication.tokenExists(MainActivity.this)) {
+                            //跳转到我的收藏页面
+                            Intent intent1 = new Intent(MainActivity.this, MyActivity.class);
+                            intent1.setAction("my_collect");
+                            startActivity(intent1);
+                            //跳转动画
+                            MyAnimator.openActivityAnim(MainActivity.this);
+
+                        }else{
+                            MyUtils.login(MainActivity.this);
+                        }
                         break;
 
                     case R.id.setting:
                         //跳转到设置页面
-                        startActivity(new Intent(MainActivity.this, Activity_Setting.class));
+                        startActivityForResult(new Intent(MainActivity.this, Activity_Setting.class),2);
                         MyAnimator.openActivityAnim(MainActivity.this);
 
 
@@ -240,7 +249,6 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
         startService(intent);
         //软件关闭时关闭系统服务
         stopService(new Intent(this, MyService.class));
-
         super.onDestroy();
     }
 
@@ -278,21 +286,26 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
                     //打开登录页面
                     startActivity(new Intent(this, Activity_Login.class));
                     MyAnimator.openActivityAnim(MainActivity.this);
+                    break;
                 }else{
                     //打开设置页面
-                    startActivity(new Intent(this, Activity_Setting.class));
+                    startActivityForResult(new Intent(this, Activity_Setting.class), 2);
                     MyAnimator.openActivityAnim(MainActivity.this);
+                    break;
                 }
-                break;
+
         }
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == ResultCodes.LOGIN_AUCCESS){
-           myAsyncTask.getinfo();
+            myAsyncTask.getinfo();
+        }else if (requestCode == 2 && resultCode == 2){
+            user_login.setText("登录");
         }
     }
 
@@ -300,10 +313,9 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-
-        myAsyncTask = new MyAsyncTask(this);
-        myAsyncTask.setOnGetUserInfoListener(this);
         myAsyncTask.getinfo();
+        myAsyncTask.setOnGetUserInfoListener(this);
+
     }
 
 

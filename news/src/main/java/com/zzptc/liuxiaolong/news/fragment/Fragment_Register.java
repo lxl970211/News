@@ -100,7 +100,6 @@ public class Fragment_Register extends Fragment implements LoginRegister.OnLogin
     }
 
     public void init(){
-        resetFocuse(true);
         reg_userName.setText(null);
         reg_pwd.setText(null);
         reg_confirmPwd.setText(null);
@@ -161,7 +160,7 @@ public class Fragment_Register extends Fragment implements LoginRegister.OnLogin
                         if (!enterCodes.getText().toString().equalsIgnoreCase(codeUtils.getCode())) {
                             codescorrect = false;
                             Toast.makeText(x.app(), "验证码错误", Toast.LENGTH_SHORT).show();
-                            resetFocuse(true);
+
                         } else {
                             codescorrect = true;
                         }
@@ -176,7 +175,6 @@ public class Fragment_Register extends Fragment implements LoginRegister.OnLogin
     private void getEvent(View v){
         switch (v.getId()) {
             case R.id.btn_register:
-            resetFocuse(false);
             //如果表单内容正确则提交注册
             if (verificationform()) {
 
@@ -187,17 +185,16 @@ public class Fragment_Register extends Fragment implements LoginRegister.OnLogin
                 //MD5加密密码
                 user.setUserPassword(MD5.parseStrToMd5L32(reg_pwd.getText().toString()));
                 loginRegister.register(user);
-                resetFocuse(true);
 
             } else {
                 Toast.makeText(getContext(), "cuowu", Toast.LENGTH_SHORT).show();
-                resetFocuse(true);
+
             }
                 break;
 
             case R.id.img_Codes:
                 codes.setImageBitmap(codeUtils.createBitmap());
-                resetFocuse(true);
+
                 break;
         }
 
@@ -210,29 +207,28 @@ public class Fragment_Register extends Fragment implements LoginRegister.OnLogin
                 //邮箱已存在
                 emailprompt.setText("邮箱已存在");
                 emailcorrect = false;
-                resetFocuse(true);
+
                 break;
             case ResultCodes.EMAILL_UNEXIST:
                 //邮箱不存在，可以使用
                 emailprompt.setText(null);
                 emailcorrect = true;
-                resetFocuse(true);
+
                 break;
             case ResultCodes.EMAIL_ERROR:
                 emailprompt.setText("请输入正确的邮箱");
                 emailcorrect = false;
-                resetFocuse(true);
+
                 break;
             case ResultCodes.REGISTER_AUCCESS:
                 Toast.makeText(getActivity(), "注册成功", Toast.LENGTH_SHORT).show();
-                resetFocuse(true);
+
                 returnloginFragment();
                 //注册成功
                 break;
 
             case ResultCodes.REGISTER_FAILED:
                 Toast.makeText(getActivity(), "注册失败", Toast.LENGTH_SHORT).show();
-                resetFocuse(true);
                 //注册失败
                 break;
         }
@@ -264,16 +260,4 @@ public class Fragment_Register extends Fragment implements LoginRegister.OnLogin
             return false;
     }
 
-    /**
-     * 设置表单焦点
-     * @param isfalse
-     */
-    public void resetFocuse(boolean isfalse){
-        reg_userName.setFocusable(isfalse);
-        reg_email.setFocusable(isfalse);
-        reg_pwd.setFocusable(isfalse);
-        reg_confirmPwd.setFocusable(isfalse);
-        enterCodes.setFocusable(isfalse);
-
-    }
 }

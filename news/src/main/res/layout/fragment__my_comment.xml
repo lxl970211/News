@@ -12,5 +12,12 @@
         android:layout_height="match_parent">
 
     </com.zzptc.liuxiaolong.news.view.AutoLoadRecyclerView>
-
+    <TextView
+        android:id="@+id/no_comment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="您还没有吐槽过任何新闻哦"
+        android:gravity="center"
+        android:background="@color/white"
+        android:visibility="gone"/>
 </FrameLayout>

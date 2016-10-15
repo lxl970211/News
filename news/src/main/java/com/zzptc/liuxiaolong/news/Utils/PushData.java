@@ -156,7 +156,10 @@ public class PushData {
         new GetRequestData().execute(rp);
     }
 
-
+    /**
+     * 更新用户名
+     * @param newName
+     */
     public void updateUserName(String newName){
         RequestParams rp = new RequestParams(StaticProperty.GETINFO_SERVLET);
         rp.addParameter("type", "updateName");
@@ -164,6 +167,20 @@ public class PushData {
         rp.addParameter("token", UserInfoAuthentication.getTokeninfo(context, "token"));
         new GetRequestStatus().execute(rp);
     }
+
+    /**
+     * 意见反馈
+     * @param info
+     * @param Contactinformation
+     */
+    public void feedback(String info, String Contactinformation){
+        RequestParams rp = new RequestParams(StaticProperty.FEEDBACK_SERVLET);
+        rp.addParameter("info", info);
+        rp.addParameter("contact", Contactinformation);
+        new GetRequestStatus().execute(rp);
+    }
+
+
     class GetRequestStatus extends AsyncTask<RequestParams, Integer, Void>{
 
         @Override

@@ -83,28 +83,10 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
             }
         });
 
-        //网路已连接
-        if (NetWorkStatus.getNetWorkType(getContext()) != 0){
-            //已登录
-            if (UserInfoAuthentication.tokenExists(getContext())){
-
-                pushData.getCollectNewsList();
-                pushData.setOnPushInfoListener(this);
-                pushData.setOnRequestResultListener(this);
-                registerForContextMenu(autoLoadRecyclerView);
-            }else {
-                MyUtils.login(getActivity());
-            }
-        }else {
-            Toast.makeText(getContext(), "请检查网络连接", Toast.LENGTH_SHORT).show();
-        }
-
-
-
-
-
 
     }
+
+
     @Override
     public void OnGetRequestDataListener(String json) {
         Gson gson = new Gson();
@@ -177,4 +159,25 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
             pushData.setOnRequestResultListener(this);
         }
     }
+
+
+    @Override
+    public void onResume() {
+        //网路已连接
+        if (NetWorkStatus.getNetWorkType(getContext()) != 0){
+            //已登录
+            if (UserInfoAuthentication.tokenExists(getContext())){
+
+                pushData.getCollectNewsList();
+                pushData.setOnPushInfoListener(this);
+                pushData.setOnRequestResultListener(this);
+                registerForContextMenu(autoLoadRecyclerView);
+            }
+        }else {
+            Toast.makeText(getContext(), "请检查网络连接", Toast.LENGTH_SHORT).show();
+        }
+
+        super.onResume();
+    }
+
 }

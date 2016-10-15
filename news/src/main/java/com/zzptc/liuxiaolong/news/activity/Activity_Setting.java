@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zzptc.liuxiaolong.news.MainActivity;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.FileUtils;
 import com.zzptc.liuxiaolong.news.Utils.MyAsyncTask;
@@ -45,6 +46,9 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
     private TextView tv_userName;
     @ViewInject(R.id.tv_myemail)
     private TextView myemail;
+    @ViewInject(R.id.btn_signUp)
+    private Button btn_signup;
+    private int resultcode = 0;
 
     private Handler handler;
     private MyAsyncTask myAsyncTask;
@@ -58,17 +62,19 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
     }
 
     public void init(){
-        myAsyncTask = new MyAsyncTask(this);
-        myAsyncTask.setOnGetUserInfoListener(this);
-        myAsyncTask.getinfo();
-
+        if (UserInfoAuthentication.tokenExists(this)){
+            btn_signup.setVisibility(View.VISIBLE);
+            myemail.setText(UserInfoAuthentication.getTokeninfo(this, "email"));
+            tv_userName.setText(UserInfoAuthentication.getTokeninfo(this, "name"));
+        }else {
+            btn_signup.setVisibility(View.GONE);
+        }
         handler = new Handler();
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                MyAnimator.closeActivityAnim(Activity_Setting.this);
+                onBackPressed();
             }
         });
 
@@ -81,21 +87,20 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
      * 点击监听
      * @param v
      */
-    @Event({R.id.tv_aboutapp,  R.id.clear_cache,R.id.tv_feedback, R.id.iv_userhead, R.id.tv_userName})
+    @Event({R.id.tv_aboutapp,  R.id.clear_cache,R.id.tv_feedback, R.id.iv_userhead, R.id.tv_userName, R.id.btn_signUp})
     private void getEvent(View v){
         switch (v.getId()){
             case R.id.tv_aboutapp:
-                Intent openAbout_app = new Intent(x.app(), Activity_Feedback.class);
-                openAbout_app.setAction("aboutapp");
-                startActivity(openAbout_app);
-                MyAnimator.openActivityAnim(Activity_Setting.this);
-
+                Intent intent1 = new Intent(this, MyActivity.class);
+                intent1.setAction("aboutApp");
+                startActivity(intent1);
+                MyAnimator.openActivityAnim(this);
                 break;
             case R.id.tv_feedback:
-                Intent feedback = new Intent(x.app(), Activity_Feedback.class);
-                feedback.setAction("feedback");
-                startActivity(feedback);
-                MyAnimator.openActivityAnim(Activity_Setting.this);
+                Intent intent2 = new Intent(this, MyActivity.class);
+                intent2.setAction("feedback");
+                startActivity(intent2);
+                MyAnimator.openActivityAnim(this);
                 break;
 
 
@@ -123,6 +128,16 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
 
                 }
 
+                break;
+
+            case R.id.btn_signUp:
+                SharedPreferences.Editor editor = getSharedPreferences("token", MODE_PRIVATE).edit();
+                editor.clear();
+                editor.commit();
+                tv_userName.setText("点击登录");
+                myemail.setText("");
+                setResult(2);
+                btn_signup.setVisibility(View.GONE);
                 break;
         }
 
@@ -158,7 +173,7 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
     @Override
     public void OnGetUserInfoListener(String name, String email) {
         tv_userName.setText(name);
-        myemail.setText(email);
+        myemail.setText(UserInfoAuthentication.getTokeninfo(this, "email"));
     }
 
 
@@ -167,7 +182,10 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ResultCodes.LOGIN_AUCCESS && resultCode == ResultCodes.LOGIN_AUCCESS){
+            myAsyncTask = new MyAsyncTask(this);
             myAsyncTask.getinfo();
+            myAsyncTask.setOnGetUserInfoListener(this);
+            btn_signup.setVisibility(View.VISIBLE);
         }
 
     }
@@ -176,9 +194,7 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
     public void OnGetRequestResultStatusListener(int status) {
         switch (status){
             case 1:
-
-                myAsyncTask.getinfo();
-                myAsyncTask.setOnGetUserInfoListener(this);
+                tv_userName.setText(UserInfoAuthentication.getTokeninfo(this, "name"));
                 break;
         }
     }
