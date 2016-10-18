@@ -1,6 +1,9 @@
 package com.zzptc.liuxiaolong.news;
 
+import com.zzptc.liuxiaolong.news.datapars.GetNews;
+
 import org.junit.Test;
+import org.xutils.x;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,4 +26,6 @@ public class ExampleUnitTest {
 
         System.out.println(sdf.format(new Date()));
     }
+
+
 }

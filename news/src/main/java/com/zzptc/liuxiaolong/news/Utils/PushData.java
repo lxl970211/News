@@ -180,8 +180,16 @@ public class PushData {
         new GetRequestStatus().execute(rp);
     }
 
+    /**
+     * 搜索新闻
+     * @param newsKeyword
+     */
+    public void searchNews(String newsKeyword){
+        RequestParams rp = new RequestParams("http://api.jisuapi.com/news/search?keyword=" + newsKeyword + "&appkey=" + StaticProperty.JISUAPIKEYS);
 
-    class GetRequestStatus extends AsyncTask<RequestParams, Integer, Void>{
+        new GetRequestData().execute(rp);
+    }
+    public class GetRequestStatus extends AsyncTask<RequestParams, Integer, Void>{
 
         @Override
         protected Void doInBackground(RequestParams... params) {
@@ -222,7 +230,7 @@ public class PushData {
     }
 
 
-    class GetRequestData extends AsyncTask<RequestParams, String, Void>{
+    public class GetRequestData extends AsyncTask<RequestParams, String, Void>{
         @Override
         protected Void doInBackground(RequestParams... params) {
             RequestParams rp = params[0];

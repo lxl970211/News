@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zzptc.liuxiaolong.news.MyApplication;
 import com.zzptc.liuxiaolong.news.R;
+import com.zzptc.liuxiaolong.news.model.NewsData;
 import com.zzptc.liuxiaolong.news.model.Search_Result;
 
 import org.xutils.image.ImageOptions;
@@ -29,10 +30,10 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     private int lastPosition = -1;
 
     private Context context;
-    private List<Search_Result.S_NewsData> list;
+    private List<NewsData> list;
 
     public interface OnClickerListener{
-        void OnclickerListener(View v, int position, String NewsUrl);
+        void OnclickerListener(View v, int position, NewsData newsData);
     }
 
     private OnClickerListener onclickerlistener;
@@ -41,7 +42,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         onclickerlistener = listener;
     }
 
-    public SearchRecyclerViewAdapter(Context context, List<Search_Result.S_NewsData> list){
+    public SearchRecyclerViewAdapter(Context context, List<NewsData> list){
         this.context = context;
         this.list = list;
 
@@ -56,13 +57,14 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         ImageOptions imageOptions = ImageOptions.DEFAULT;
-        final Search_Result.S_NewsData newsData = list.get(position);
+        final NewsData newsData = list.get(position);
+
         if (newsData != null){
 
             holder.tv_newsTitle.setText(newsData.getTitle());
             holder.tv_newsAuthor_name.setText(newsData.getCategory());
-            x.image().bind(holder.iv_newsPic,newsData.getPic(),imageOptions);
-            ImageLoader.getInstance().displayImage(newsData.getPic(), holder.iv_newsPic, MyApplication.mOptions);
+            x.image().bind(holder.iv_newsPic,newsData.getThumbnail_pic_s(),imageOptions);
+//            ImageLoader.getInstance().displayImage(newsData.getPic(), holder.iv_newsPic, MyApplication.mOptions);
 
         }
         setAnimation(holder.card, position);
@@ -70,7 +72,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickerlistener.OnclickerListener(holder.itemView, position, newsData.getUrl());
+                    onclickerlistener.OnclickerListener(holder.itemView, position, newsData);
 
                 }
             });

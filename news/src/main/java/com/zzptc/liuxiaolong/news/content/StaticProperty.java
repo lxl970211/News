@@ -28,7 +28,7 @@ public class StaticProperty {
     //注册servlet
     public static final String REGISTER_SERVLET = "http://10.0.2.2:8080/News/servlet/RegisterServlet";
 
-    public static final String URL = "http://10.0.2.2:8080/News/servlet/";
+    public static final String URL = "http://192.168.1.101:8080/News/servlet/";
     //登录servlet
     public static final String LOGIN_SERVLET =  URL+"LoginServlet";
     public static final String COMMENT_SERVLET = URL+"CommentServlet";

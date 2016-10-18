@@ -16,16 +16,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zzptc.liuxiaolong.news.R;
-import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
 import com.zzptc.liuxiaolong.news.Utils.PushData;
 import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
-import com.zzptc.liuxiaolong.news.activity.Activity_Login;
 import com.zzptc.liuxiaolong.news.activity.Activity_NewsDetail;
 import com.zzptc.liuxiaolong.news.adapter.CollectNewsAdapter;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
-import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.javabean.CollectNewsBean;
 import com.zzptc.liuxiaolong.news.javabean.CollectNewsData;
 import com.zzptc.liuxiaolong.news.model.NewsData;
@@ -125,6 +122,12 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case 0:
+
+                                Intent intent = new Intent();
+                                intent.setAction(Intent.ACTION_SEND);
+                                intent.putExtra(Intent.EXTRA_SUBJECT, "xinwen");
+                                intent.putExtra(Intent.EXTRA_TEXT, url);
+                                startActivity(Intent.createChooser(intent, "分享到"));
                                 break;
 
                             case 1:
@@ -179,5 +182,8 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
 
         super.onResume();
     }
+
+
+
 
 }

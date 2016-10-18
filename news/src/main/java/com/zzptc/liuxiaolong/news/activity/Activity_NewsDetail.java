@@ -1,10 +1,13 @@
 package com.zzptc.liuxiaolong.news.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -121,41 +124,35 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
             newsData = (NewsData) intent.getSerializableExtra("newsData") ;
             //新闻url
 
-            if ("search".equals(intent.getStringExtra("search"))){
 
-                webView.loadUrl(newsData.getUrl());
-
-            }else{
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Document document = null;
-                    try {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Document document = null;
+                        try {
                         /*
                         删除新闻页面中不必要的模块
                          */
-                        document = Jsoup.connect(newsData.getUrl()).get();
-                        document.select("div.pswp").remove();
+                            document = Jsoup.connect(newsData.getUrl()).get();
+                            document.select("div.pswp").remove();
 
 
+                            Element e1 = document.getElementById("news_check");
+                            e1.remove();
 
-                        Element e1 = document.getElementById("news_check");
-                        e1.remove();
-
-                        final String url = document.toString();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                webView.loadDataWithBaseURL(null, url, "text/html", "utf-8", null);
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                            final String url = document.toString();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    webView.loadDataWithBaseURL(null, url, "text/html", "utf-8", null);
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            }).start();
-                }
+                }).start();
+
           }
 
 
@@ -164,7 +161,6 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
             if (NetWorkStatus.getNetWorkType(this) != 0 && UserInfoAuthentication.tokenExists(this)){
                 pushData.checkIsCollect(newsData.getUrl());
                 pushData.setOnRequestResultListener(this);
-
             }
 
 
@@ -217,6 +213,7 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
                 break;
 
             case R.id.iv_share: //分享新闻
+
 
                 break;
 
@@ -271,4 +268,7 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
         commentBean = gson.fromJson(json, CommentBean.class);
         tv_sumReview.setText(commentBean.getCommentCount()+"");
     }
+
+
+
 }

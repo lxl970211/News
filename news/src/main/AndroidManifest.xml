@@ -35,7 +35,7 @@
 
         <activity
             android:name=".activity.Activity_Setting"
-            android:theme="@style/ortherActivityStyle" />
+             />
         <activity
             android:name=".activity.Activity_NewsDetail"
             android:theme="@style/ortherActivityStyle"

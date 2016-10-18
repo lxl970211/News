@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 
 import com.google.gson.Gson;
+import com.zzptc.liuxiaolong.news.MainActivity;
 import com.zzptc.liuxiaolong.news.Utils.FileUtils;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.model.NewsData;
@@ -16,6 +17,10 @@ import com.zzptc.liuxiaolong.news.model.Newsbean;
 import com.zzptc.liuxiaolong.news.model.SearchNewsBean;
 import com.zzptc.liuxiaolong.news.model.Search_Result;
 import com.zzptc.liuxiaolong.news.service.MyService;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -253,7 +258,11 @@ public class GetNews {
     }
 
 
-
+    /**
+     * 解析新闻json数据转为list
+     * @param json
+     * @return
+     */
     public List<NewsData> parsJsonToData(String json){
         Gson gson = new Gson();
         //得到json数据
@@ -268,37 +277,57 @@ public class GetNews {
         return list;
     }
 
-    /**
-     * 得到根据关键字的搜索新闻列表
-     * @param searchNewsKeyWord
-     * @return
-     */
-    public List<Search_Result.S_NewsData> getsearchNews(String searchNewsKeyWord){
-        List<Search_Result.S_NewsData> list = new ArrayList<>();
-        Gson gson = new Gson();
-        try {
-            //api接口地址
-            URL url = new URL("http://api.jisuapi.com/news/search?keyword=" + searchNewsKeyWord + "&appkey=" + StaticProperty.JISUAPIKEYS);
-            //得到json数据
-            String jsondata = getJson(url);
-            if (jsondata != null) {
-                //解析json数据得到新闻列表
-            SearchNewsBean searchNewsBean = gson.fromJson(jsondata, SearchNewsBean.class);
-            list = searchNewsBean.getResult().getList();
-        }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return list;
-    }
-
 
     public static String newsUrl(String newsType){
 
         return "http://v.juhe.cn/toutiao/index?type=" + newsType + "&key=" + StaticProperty.APPKEYS;
     }
+
+    public void searchNews(String type){
+        new SearchNews().execute(type);
+    }
+    class SearchNews extends AsyncTask<String, Void, List<NewsData>>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (onGetNewsListener != null) {
+                onGetNewsListener.OnStartGetNewsListener();
+            }
+        }
+
+        @Override
+        protected List<NewsData> doInBackground(final String... params) {
+            GetNews getNews = new GetNews(context);
+            URL url = null;
+
+            List<NewsData> list = new ArrayList<>();
+            for (int i = 0; i< MainActivity.pinyintitles.length; i++) {
+                try {
+                    url = new URL(newsUrl(MainActivity.pinyintitles[i]));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+                String json = getNews.getJson(url);
+                List<NewsData> list2 = getNews.parsJsonToData(json);
+                for (NewsData newsData : list2){
+                    if (newsData.getTitle().contains(params[0])){
+                        list.add(newsData);
+                    }
+                }
+            }
+            return list;
+        }
+
+
+        @Override
+        protected void onPostExecute(List<NewsData> newsDatas) {
+            super.onPostExecute(newsDatas);
+            if (onGetNewsListener != null){
+                onGetNewsListener.OnCompleteGetNewsListener(newsDatas);
+            }
+        }
+    }
+
 
 }
