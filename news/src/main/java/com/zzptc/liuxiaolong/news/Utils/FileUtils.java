@@ -299,26 +299,6 @@ public class FileUtils {
         return String.format("%.2f", getDirSize(file))+"MB";
     }
 
-    public List<Bitmap> loadTopImage(Context context){
-
-        List<Bitmap> img = new ArrayList<>();
-        final GetNews getNews = new GetNews(context);
-        String[] titles = MainActivity.pinyintitles;
-        for(int i = 0; i<titles.length; i++){
-            if (getNews.getNewsDataFromCache(titles[i]) != null) {
-                final List<NewsData> list = getNews.getNewsDataFromCache(titles[i]);
-
-                String imgurl = list.get(0).getThumbnail_pic_s03();
-                if (getPicFromCache(imgurl) != null) {
-                    img.add(getPicFromCache(imgurl));
-                } else {
-                    img.add(getNews.downloadImageByUrl(imgurl));
-                }
-
-            }
-        }
-        return img;
-    }
 
 
 }

@@ -104,6 +104,7 @@
         </RelativeLayout>
 
             <TextView
+                android:id="@+id/tv_update"
                 style="@style/settingBtnItemStyle"
                 android:text="检查更新"/>
 

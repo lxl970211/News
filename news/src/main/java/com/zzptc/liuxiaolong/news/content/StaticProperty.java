@@ -25,14 +25,17 @@ public class StaticProperty {
     //服务器URL
     //新闻SDKURL
     public static final String NEWS_SDK_URL = "http://v.juhe.cn/toutiao/index";
-    //注册servlet
-    public static final String REGISTER_SERVLET = "http://10.0.2.2:8080/News/servlet/RegisterServlet";
 
-    public static final String URL = "http://192.168.1.101:8080/News/servlet/";
+    public static final String URL = "http://10.0.2.2:8080/News/servlet/";
+    public static final String DOWNLOAD_URL = "http://10.0.2.2:8080";
+    //注册servlet
+    public static final String REGISTER_SERVLET = URL+"RegisterServlet";
+
     //登录servlet
     public static final String LOGIN_SERVLET =  URL+"LoginServlet";
     public static final String COMMENT_SERVLET = URL+"CommentServlet";
     public static final String USER_COLLECT_NEWS_MANAGE_SERVLET = URL+"UserCollectNewsManageServlet";
     public static final String GETINFO_SERVLET = URL+"GetInfoServlet";
     public static final String FEEDBACK_SERVLET = URL+"FeedbackServlet";
+    public static final String CHECKUPDATE_SERVLET = URL+"UpdateServlet";
 }

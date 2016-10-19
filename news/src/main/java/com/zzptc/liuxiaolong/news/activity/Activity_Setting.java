@@ -21,6 +21,7 @@ import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
+import com.zzptc.liuxiaolong.news.fragment.Fragment_CheckUpdate;
 import com.zzptc.liuxiaolong.news.fragment.Fragment_modifyName_dialog;
 import com.zzptc.liuxiaolong.news.view.BaseActivity;
 import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
@@ -87,7 +88,7 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
      * 点击监听
      * @param v
      */
-    @Event({R.id.tv_aboutapp,  R.id.clear_cache,R.id.tv_feedback, R.id.iv_userhead, R.id.tv_userName, R.id.btn_signUp})
+    @Event({R.id.tv_aboutapp,  R.id.clear_cache,R.id.tv_feedback, R.id.iv_userhead, R.id.tv_userName, R.id.btn_signUp, R.id.tv_update})
     private void getEvent(View v){
         switch (v.getId()){
             case R.id.tv_aboutapp:
@@ -138,6 +139,11 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
                 myemail.setText("");
                 setResult(2);
                 btn_signup.setVisibility(View.GONE);
+                break;
+
+            case R.id.tv_update:
+                Fragment_CheckUpdate checkUpdate = new Fragment_CheckUpdate();
+                checkUpdate.show(getSupportFragmentManager(), null);
                 break;
         }
 

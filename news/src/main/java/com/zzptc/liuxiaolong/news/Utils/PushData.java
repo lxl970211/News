@@ -180,13 +180,13 @@ public class PushData {
         new GetRequestStatus().execute(rp);
     }
 
-    /**
-     * 搜索新闻
-     * @param newsKeyword
-     */
-    public void searchNews(String newsKeyword){
-        RequestParams rp = new RequestParams("http://api.jisuapi.com/news/search?keyword=" + newsKeyword + "&appkey=" + StaticProperty.JISUAPIKEYS);
 
+
+    /**
+     * 检查软件更新
+     */
+    public void checkUpdate(){
+        RequestParams rp = new RequestParams(StaticProperty.CHECKUPDATE_SERVLET);
         new GetRequestData().execute(rp);
     }
     public class GetRequestStatus extends AsyncTask<RequestParams, Integer, Void>{

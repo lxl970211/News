@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    tools:context="com.zzptc.liuxiaolong.news.fragment.Fragment_CheckUpdate">
+
+    <RelativeLayout
+        android:id="@+id/rl_updateInfo"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/tv_updateInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="检查到新版本是否更新"
+            android:paddingTop="20dp"
+            android:paddingLeft="15dp"
+            android:textSize="17sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="right">
+            
+            <Button
+                android:id="@+id/btn_cacelUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_btn_shape"
+                android:textColor="@color/blue"
+                android:text="@string/cancel"
+                />
+            <Button
+                android:id="@+id/btn_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fix"
+                android:background="@drawable/setting_btn_shape"
+                android:textColor="@color/blue"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_load"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center|center_horizontal"
+        android:gravity="center"
+
+        android:background="@color/white">
+
+        <fr.castorflex.android.circularprogressbar.CircularProgressBar
+            android:id="@+id/update_load"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:indeterminate="true"
+            app:cpb_color="#FFee44"
+            app:cpb_colors="@array/gplus_colors"
+            app:cpb_rotation_speed="1.0"
+            app:cpb_sweep_speed="1.0"
+            app:cpb_stroke_width="2dp"
+            app:cpb_min_sweep_angle="10"
+            app:cpb_max_sweep_angle="300"
+            android:layout_centerInParent="true"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/checkUpdate"
+            android:layout_below="@id/update_load"
+            android:gravity="center"
+            android:layout_marginTop="10dp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
