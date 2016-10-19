@@ -23,11 +23,10 @@ public class StaticProperty {
     //邮箱正则表达式
     public static final String EMAIL_REGULAT_EXPRESSIONS = "^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
     //服务器URL
-    //新闻SDKURL
-    public static final String NEWS_SDK_URL = "http://v.juhe.cn/toutiao/index";
 
-    public static final String URL = "http://10.0.2.2:8080/News/servlet/";
-    public static final String DOWNLOAD_URL = "http://10.0.2.2:8080";
+    public static final String DOWNLOAD_URL = "http://192.168.1.133:8080";
+    public static final String URL = DOWNLOAD_URL+"/News/servlet/";
+
     //注册servlet
     public static final String REGISTER_SERVLET = URL+"RegisterServlet";
 
@@ -38,4 +37,5 @@ public class StaticProperty {
     public static final String GETINFO_SERVLET = URL+"GetInfoServlet";
     public static final String FEEDBACK_SERVLET = URL+"FeedbackServlet";
     public static final String CHECKUPDATE_SERVLET = URL+"UpdateServlet";
+    public static final String UPLOAD_SERVLET = URL+"UploadServlet";
 }

@@ -7,5 +7,5 @@ import android.view.View;
  */
 
 public interface OnLongClickListener {
-    void OnLongClickListener(View view, int position, String url);
+    void OnLongClickListener(View view, int position, String url, String title);
 }

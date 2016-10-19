@@ -73,7 +73,7 @@ public class Fragment_CheckUpdate extends DialogFragment implements PushData.OnP
         pushData = new PushData(getContext());
         pushData.setOnPushInfoListener(this);
 
-        handler.postDelayed(checkUpdate, 3000);
+        handler.postDelayed(checkUpdate, 2000);
     }
 
 
@@ -124,7 +124,6 @@ public class Fragment_CheckUpdate extends DialogFragment implements PushData.OnP
                     dismiss();
 
                 }
-
                 break;
         }
 

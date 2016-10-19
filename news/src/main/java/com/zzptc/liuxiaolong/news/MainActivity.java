@@ -44,6 +44,8 @@ import org.xutils.x;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 @ContentView(R.layout.activity_main)
 public class MainActivity extends AutoLayoutActivity implements View.OnClickListener, MyAsyncTask.OnGetUserInfoListener{
 
@@ -67,7 +69,7 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
     private ImageView search_news;
 
     //navigationView headerview
-    private ImageView user_head;
+    private CircleImageView user_head;
     private TextView user_login;
 
     
@@ -122,7 +124,7 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
         View headerLayout = navigationView.getHeaderView(0);
 
         user_login = (TextView) headerLayout.findViewById(R.id.user_login);
-        user_head = (ImageView) headerLayout.findViewById(R.id.user_head);
+        user_head = (CircleImageView) headerLayout.findViewById(R.id.user_head);
 
 
         user_head.setOnClickListener(this);

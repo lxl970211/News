@@ -3,6 +3,7 @@ package com.zzptc.liuxiaolong.news.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zzptc.liuxiaolong.news.R;
+import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
 import com.zzptc.liuxiaolong.news.Utils.PushData;
 import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
@@ -38,6 +40,7 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -213,7 +216,7 @@ public class Activity_NewsDetail extends BaseActivity implements OnRequestResult
                 break;
 
             case R.id.iv_share: //分享新闻
-
+                MyUtils.shareMsg(this, "分享到", null, newsData.getTitle()+newsData.getUrl(), null);
 
                 break;
 

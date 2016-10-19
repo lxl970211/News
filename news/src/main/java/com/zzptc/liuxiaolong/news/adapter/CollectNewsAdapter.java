@@ -67,7 +67,7 @@ public class CollectNewsAdapter  extends RecyclerView.Adapter<CollectNewsAdapter
                 @Override
                 public boolean onLongClick(View v) {
                     if (onLongClickListener != null){
-                        onLongClickListener.OnLongClickListener(holder.itemView, position, collectNewsData.getUrl());
+                        onLongClickListener.OnLongClickListener(holder.itemView, position, collectNewsData.getUrl(), collectNewsData.getTitle());
                     }
                     return false;
                 }

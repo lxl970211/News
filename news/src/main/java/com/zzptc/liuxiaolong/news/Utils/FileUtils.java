@@ -103,6 +103,31 @@ public class FileUtils {
     }
 
 
+    public void saveBitmapToFile(Bitmap bm) {
+
+        if (bm == null) {
+            return;
+        }
+
+        //判断文件路径是否为空，为空则创建
+        isFileExists();
+
+        File file = new File(Environment.getExternalStorageDirectory()+"/MyNews/image.jpg");
+        try {
+            file.createNewFile();
+            OutputStream os = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.flush();
+            os.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
     /**
      * 从缓存中读取图片
      *

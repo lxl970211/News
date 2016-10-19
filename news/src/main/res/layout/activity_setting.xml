@@ -29,10 +29,9 @@
         >
 
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_userhead"
             android:layout_width="110dp"
-            android:scaleType="fitXY"
             android:layout_height="110dp"
             android:src="@mipmap/man"
             android:layout_centerVertical="true"

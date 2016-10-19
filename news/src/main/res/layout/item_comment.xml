@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/tv_comment_head"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -78,19 +78,13 @@
         android:layout_height="35dp"
         android:paddingRight="10dp"
         >
-        <TextView
-            style="@style/CommentfunctionTextViewStyle"
-            android:id="@+id/tv_reply"
-            android:text="@string/reply"
-            android:layout_alignParentRight="true"
-            />
 
         <TextView
             style="@style/CommentfunctionTextViewStyle"
             android:id="@+id/tv_buttress"
             android:text="@string/buttress"
             android:textColor="@color/google_color_green"
-            android:layout_toLeftOf="@id/tv_reply"
+            android:layout_alignParentRight="true"
             />
 
 

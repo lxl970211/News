@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zzptc.liuxiaolong.news.R;
+import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.Utils.NetWorkStatus;
 import com.zzptc.liuxiaolong.news.Utils.PushData;
 import com.zzptc.liuxiaolong.news.Utils.UserInfoAuthentication;
@@ -115,19 +116,14 @@ public class Fragment_MyCollectNews extends Fragment implements PushData.OnPushI
 
 
     @Override
-    public void OnLongClickListener(View view, final int position, final String url) {
+    public void OnLongClickListener(View view, final int position, final String url, final String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setItems(new String[]{"分享", "删除"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case 0:
-
-                                Intent intent = new Intent();
-                                intent.setAction(Intent.ACTION_SEND);
-                                intent.putExtra(Intent.EXTRA_SUBJECT, "xinwen");
-                                intent.putExtra(Intent.EXTRA_TEXT, url);
-                                startActivity(Intent.createChooser(intent, "分享到"));
+                                MyUtils.shareMsg(getContext(), "分享到", null, title+url, null);
                                 break;
 
                             case 1:
