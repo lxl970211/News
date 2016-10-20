@@ -103,16 +103,14 @@ public class FileUtils {
     }
 
 
-    public void saveBitmapToFile(Bitmap bm) {
+    public void saveBitmapToFile(Bitmap bm, String imgName) {
 
         if (bm == null) {
             return;
         }
 
-        //判断文件路径是否为空，为空则创建
-        isFileExists();
 
-        File file = new File(Environment.getExternalStorageDirectory()+"/MyNews/image.jpg");
+        File file = new File(Environment.getExternalStorageDirectory()+"/MyNews/"+imgName);
         try {
             file.createNewFile();
             OutputStream os = new FileOutputStream(file);

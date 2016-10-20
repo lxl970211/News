@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -22,6 +24,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.zhy.autolayout.AutoLayoutActivity;
 import com.zzptc.liuxiaolong.news.Utils.MyAsyncTask;
 import com.zzptc.liuxiaolong.news.Utils.MyUtils;
@@ -35,6 +39,7 @@ import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.fragment.MyFragment;
+import com.zzptc.liuxiaolong.news.javabean.User;
 import com.zzptc.liuxiaolong.news.service.MyService;
 
 import org.xutils.view.annotation.ContentView;
@@ -305,9 +310,12 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == ResultCodes.LOGIN_AUCCESS){
-            myAsyncTask.getinfo();
+
+            myAsyncTask.getUserInfo();
+            myAsyncTask.setOnGetUserInfoListener(this);
         }else if (requestCode == 2 && resultCode == 2){
             user_login.setText("登录");
+            user_head.setImageResource(R.mipmap.man);
         }
     }
 
@@ -315,15 +323,21 @@ public class MainActivity extends AutoLayoutActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        myAsyncTask.getinfo();
-        myAsyncTask.setOnGetUserInfoListener(this);
 
+
+        if (UserInfoAuthentication.tokenExists(this)) {
+            myAsyncTask.getUserInfo();
+            myAsyncTask.setOnGetUserInfoListener(this);
+        }
     }
 
 
 
     @Override
-    public void OnGetUserInfoListener(String name, String email) {
-        user_login.setText(name);
+    public void OnGetUserInfoListener(User user) {
+        System.out.println(user.getHeadPath());
+
+        user_login.setText(user.getUserName());
+        ImageLoader.getInstance().displayImage(user.getHeadPath(),user_head, MyApplication.headOptions);
     }
 }

@@ -3,7 +3,6 @@ package com.zzptc.liuxiaolong.news.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,19 +13,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.LoginRegister;
 import com.zzptc.liuxiaolong.news.Utils.MD5;
-import com.zzptc.liuxiaolong.news.Utils.MyUtils;
 import com.zzptc.liuxiaolong.news.animator.MyAnimator;
 import com.zzptc.liuxiaolong.news.content.ResultCodes;
-import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.javabean.User;
-import com.zzptc.liuxiaolong.news.javabean.ResultData;
 
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -90,7 +83,6 @@ public class Fragment_Login extends Fragment implements LoginRegister.OnLoginReg
 
     @Override
     public void OnGetServerResponseCodesListener(int ResponseCodes, String token) {
-        System.out.println(ResponseCodes);
         switch (ResponseCodes){
             case ResultCodes.LOGIN_AUCCESS:
                 Toast.makeText(getContext(), "登录成功", Toast.LENGTH_SHORT).show();

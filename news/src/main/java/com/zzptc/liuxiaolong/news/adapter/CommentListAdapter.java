@@ -8,12 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zzptc.liuxiaolong.news.MyApplication;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.MyUtils;
+import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.javabean.Comment;
 
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by lxl97 on 2016/10/7.
@@ -57,8 +62,8 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             long time = MyUtils.nowTimeLong() - MyUtils.timeStringToLong(comment.getCommentTime());
             holder.commentTime.setText(MyUtils.getCommentDistanceCurrentTime(time)+"前");
             holder.content.setText(comment.getContent());
-
-
+            System.out.println(StaticProperty.DOWNLOAD_URL+comment.getHead());
+            ImageLoader.getInstance().displayImage(StaticProperty.DOWNLOAD_URL+comment.getHead(), holder.header, MyApplication.headOptions);
             if (type == 0) {
                 holder.like.setText("支持(" + list.get(position).getLike() + ")");
             }else if (type == 1){
@@ -83,7 +88,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        ImageView header;
+        CircleImageView header;
         TextView name;
         TextView commentTime;
         TextView like;
@@ -91,6 +96,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         TextView lou;
         public MyViewHolder(View itemView) {
             super(itemView);
+            header = (CircleImageView) itemView.findViewById(R.id.tv_comment_head);
             name = (TextView) itemView.findViewById(R.id.tv_comment_name);
             commentTime = (TextView) itemView.findViewById(R.id.tv_comment_time);
             content = (TextView) itemView.findViewById(R.id.tv_comment_content);

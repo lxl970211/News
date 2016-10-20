@@ -91,6 +91,9 @@ public class FragmentDialog_WriteComment extends DialogFragment implements OnReq
                             pushData.writeComment(content, newsId, title);
 
                             pushData.setOnRequestResultListener(this);
+                            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+
+                            imm.hideSoftInputFromWindow(et_write_comment.getWindowToken(), 0);
                             dismiss();
                         } else {
                             Toast.makeText(getContext(), "请输入评论内容", Toast.LENGTH_SHORT).show();
@@ -127,7 +130,8 @@ public class FragmentDialog_WriteComment extends DialogFragment implements OnReq
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+
+        imm.hideSoftInputFromWindow(et_write_comment.getWindowToken(), 0);
 
     }
 }

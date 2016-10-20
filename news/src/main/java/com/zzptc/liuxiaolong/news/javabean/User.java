@@ -1,5 +1,7 @@
 package com.zzptc.liuxiaolong.news.javabean;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by lxl97 on 2016/9/7.
  */
@@ -10,6 +12,7 @@ public class User {
     private String userPassword;
     private String headPath;
     private String type;
+    private Bitmap head;
     public String getType() {
         return type;
     }
@@ -50,4 +53,11 @@ public class User {
         this.headPath = headPath;
     }
 
+    public Bitmap getHead() {
+        return head;
+    }
+
+    public void setHead(Bitmap head) {
+        this.head = head;
+    }
 }

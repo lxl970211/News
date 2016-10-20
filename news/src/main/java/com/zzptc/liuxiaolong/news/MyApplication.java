@@ -21,7 +21,7 @@ import org.xutils.x;
 public class MyApplication extends Application {
     private static Context mContext;
     public static DisplayImageOptions mOptions;
-
+    public static DisplayImageOptions headOptions;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -55,6 +55,16 @@ public class MyApplication extends Application {
                 .showImageOnLoading(R.mipmap.edit_mode_image)
                 .showImageForEmptyUri(R.mipmap.edit_mode_image)
                 .showImageOnFail(R.mipmap.edit_mode_image)
+                .cacheInMemory(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .displayer(new FadeInBitmapDisplayer(200))
+                .build();
+
+
+        headOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.man)
+                .showImageForEmptyUri(R.mipmap.man)
+                .showImageOnFail(R.mipmap.man)
                 .cacheInMemory(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .displayer(new FadeInBitmapDisplayer(200))

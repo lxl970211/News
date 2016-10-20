@@ -28,8 +28,9 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zzptc.liuxiaolong.news.MyApplication;
 import com.zzptc.liuxiaolong.news.R;
 import com.zzptc.liuxiaolong.news.Utils.FileUtils;
 import com.zzptc.liuxiaolong.news.Utils.ImageTools;
@@ -41,6 +42,7 @@ import com.zzptc.liuxiaolong.news.content.ResultCodes;
 import com.zzptc.liuxiaolong.news.content.StaticProperty;
 import com.zzptc.liuxiaolong.news.fragment.Fragment_CheckUpdate;
 import com.zzptc.liuxiaolong.news.fragment.Fragment_modifyName_dialog;
+import com.zzptc.liuxiaolong.news.javabean.User;
 import com.zzptc.liuxiaolong.news.view.BaseActivity;
 import com.zzptc.liuxiaolong.news.view.OnRequestResultListener;
 
@@ -53,6 +55,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -105,11 +108,13 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
     }
 
     public void init(){
+        myAsyncTask = new MyAsyncTask(this);
         httpUtils = new HttpUtils(10000);
         if (UserInfoAuthentication.tokenExists(this)){
             btn_signup.setVisibility(View.VISIBLE);
-            myemail.setText(UserInfoAuthentication.getTokeninfo(this, "email"));
-            tv_userName.setText(UserInfoAuthentication.getTokeninfo(this, "name"));
+
+            myAsyncTask.getUserInfo();
+            myAsyncTask.setOnGetUserInfoListener(this);
         }else {
             btn_signup.setVisibility(View.GONE);
         }
@@ -197,8 +202,14 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
                 SharedPreferences.Editor editor = getSharedPreferences("token", MODE_PRIVATE).edit();
                 editor.clear();
                 editor.commit();
+
                 tv_userName.setText("点击登录");
+                iv_userhead.setImageResource(R.mipmap.man);
                 myemail.setText("");
+                File file = new File(Environment.getExternalStorageDirectory()+"/MyNews/image.jpg");
+                if (file.exists())
+                    file.delete();
+
                 setResult(2);
                 btn_signup.setVisibility(View.GONE);
                 break;
@@ -238,11 +249,6 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
         MyAnimator.closeActivityAnim(this);
     }
 
-    @Override
-    public void OnGetUserInfoListener(String name, String email) {
-        tv_userName.setText(name);
-        myemail.setText(UserInfoAuthentication.getTokeninfo(this, "email"));
-    }
 
 
 
@@ -250,8 +256,8 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ResultCodes.LOGIN_AUCCESS && resultCode == ResultCodes.LOGIN_AUCCESS) {
-            myAsyncTask = new MyAsyncTask(this);
-            myAsyncTask.getinfo();
+
+            myAsyncTask.getUserInfo();
             myAsyncTask.setOnGetUserInfoListener(this);
             btn_signup.setVisibility(View.VISIBLE);
         }
@@ -297,7 +303,7 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
                         if (photo != null) {
                             //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
                             Bitmap smallBitmap = ImageTools.zoomBitmap(photo, photo.getWidth() / 5, photo.getHeight() / 5);
-                            new FileUtils().saveBitmapToFile(smallBitmap);
+                            new FileUtils().saveBitmapToFile(smallBitmap, "image.jpg");
                             iv_userhead.setImageBitmap(smallBitmap);
                             upload();
                         }
@@ -313,6 +319,17 @@ public class Activity_Setting extends BaseActivity implements MyAsyncTask.OnGetU
             }
         }
     }
+
+    @Override
+    public void OnGetUserInfoListener(User user) {
+
+        tv_userName.setText(user.getUserName());
+        myemail.setText(user.getUserEmail());
+        System.out.println(user.getHeadPath());
+        ImageLoader.getInstance().displayImage(user.getHeadPath(),iv_userhead, MyApplication.headOptions);
+
+    }
+
 
     @Override
     public void OnGetRequestResultStatusListener(int status) {
