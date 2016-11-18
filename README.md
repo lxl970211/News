@@ -9,4 +9,9 @@ News是一款基于安卓平台开发的新闻客户端软件，软件实现新�
 <img src="https://github.com/lxl970211/News/raw/master/news/image/zhuyemian.jpg" width="270" height="470">
 * 新闻详细页面<br>
 <img src="https://github.com/lxl970211/News/raw/master/news/image/News_detail.png" width="270" height="470">
-
+* 新闻评论界面<br>
+<img src="https://github.com/lxl970211/News/raw/master/news/image/News_Comment.png" width="270" height="470">
+* 新闻收藏界面
+<img src="https://github.com/lxl970211/News/raw/master/news/image/News_Collect.png" width="270" height="470">
+* 我的评论界面
+<img src="https://github.com/lxl970211/News/raw/master/news/image/News_Mycomment.png" width="270" height="470">
